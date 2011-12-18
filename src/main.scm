@@ -10,36 +10,35 @@
 
 ; Main routine
 ; state - arbitrary datastructure representing state of envionrment
-; possible - actions is a list of functions which can be performed
-(define do-learning
-	(lambda (current-time state possible-actions)
-		(cond
-			(can-continue? current-time)
-			(begin
-				(define current-model (select-model observed-data))
-				(define best-action (sparse-sampling current-model current-state))
-				(define state-reward (execute-action best-action))
-				((do-learning (car state-reward) (+ 1 current-time)))))))	
-			
-; Can the world continue
-; Want to stop if world has stopped or after t-max timesteps
-(define can-continue?
-	(lambda (current-time state)
-		(if (< current-time 10)
-			#t
-			#f)))
+; possible-actions is a list of functions which can be performed
+
+(load "domain.scm")
+(load "sparsesampling.scm")
 
 ; Select a model								
 (define select-model
 	(lambda (observed-data)
-		(model))) ;Bayesian Magic Here
+		(test-model))) ;Bayesian Magic Here
 
-; Do sparse sampling into future
-(define sparse-sampling
-	(lambda (model state)
-		(X)))
-		
-; Domain Specific
+; One solution is provide a function state-queries which returns functiosn which give information about state
+; Problem is select-model doesnt know what actions are possible
+(define do-learning
+	(lambda (current-time state possible-actions state-queries)
+		(cond
+			((state-queries 'can-continue?) current-time state)
+			(begin
+				(define current-model (select-model observed-data state-queries))
+				(define best-action (sparse-sampling current-model current-state))
+				(define state-reward (execute-action best-action))
+				((do-learning (car state-reward) (+ 1 current-time)))))))	
 
 ; Let's roll
-(do-learning 0 c)
+(let ((size-x 10)
+	  (size-y 10)
+	  (start-pos-x 0)
+	  (start-pos-y 0))
+	(do-learning
+		0 
+		(create-initial-state size-x size-y start-pos-x start-pos-y)
+		possible-actions
+		state-queries))
