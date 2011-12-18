@@ -94,28 +94,37 @@
 
 \newcommand{\mycomment}[1]{{\color{blue} #1}}
 
-\title{Reinforcement Learning}
+\title{Probabilistic Program Induction for Model-Based Reinforcement Learning}
 
 % The thanks line in the title should be filled in if there is
 % any support acknowledgement for the overall work to be included
 % This \thanks is also used for the received by date info, but
 % authors are not expected to provide this.
 
-\author{Dr X\thanks{Massachusetts Institute of Technology}
+\author{Zenna Tavares and Max Siegel\thanks{Department of Brain \& Cognitive Sciences, Massachusetts Institute of Technology}
 }
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
+Model-based reinforcement learning is a powerful method for acting in unknown environments, but most approaches require specific, limiting assumptions about the world model.
+Probabilistic program induction promises flexible, universal learning from data.
+We present a principled method for inducing and using adaptive generative models in reinforcement learning. 
+The approach is to learn probabilistic models from experience and choose actions by sparse sampling.
 \end{abstract}
 
 \begin{keywords}
+Probabilistic program induction, model-based reinforcement learning, Church
 \end{keywords}
 
+\section{Introduction}
+Reinforcement learning (RL) is a successful field of machine learning that has enjoyed much practical application, and is often the method of choice when acting in unknown or partially-unknown environments.
+However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. Consider the finite-state automaton in Figure 1.
 We made this agent with church and he learned everything.
 Well done, agent.
 \bibliographystyle{siam}
 \bibliography{library}
+
 
 \end{document}
