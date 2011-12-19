@@ -172,8 +172,19 @@ Reinforcement learning (RL) is a formalization of the problem of learning to beh
 
 The classical theory of RL typically solves the problem by estimating $(R,T,A)$ and using techniques from the theory of MDPs (see below). This effectively disregards the exploration aspect of the tradeoff mentioned above . Other techniques try to estimate and incorporate the \emph{value of perfect information} and other heuristics to encourage exploration.
 \subsection*{Markov Decision Processes}
-Markov Decision Processes (MDPs) are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. 
-
+Markov Decision Processes (MDPs) are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. For small MDPs, this is straightforward; algorithms for exact calculation have been known since the 1950s. For large MDPs,  approximate techniques are required. Sparse sampling is one such method.
+\subsection*{Sparse Sampling}
+Sparse sampling is a method for choosing actions to maximize rewards in MDPs for which the learning agent has a generative model of the world. 
+A \emph{generative model} is a probability distribution $p: S\times A \to S\times \mathbb{R}$ that, given a state and action, returns a new state and a reward. 
+Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use normal methods to solve it. 
+\subsection*{Probabilistic Program Induction}
+Probabilistic program induction techniques attempt to learn programs from data. 
+We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
+Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the posterior probability distribution over programs.
+\subsection*{Church}
+Church is an extension of the programming language Scheme to allow stochastic functions.
+It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
+A flurry of recent work has focused on probabilistic program induction using Church.
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
 JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
