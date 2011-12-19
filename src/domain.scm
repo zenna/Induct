@@ -58,8 +58,6 @@
              (cons '(CREATE STATE FROM NEW POSITION) 1.0))
             (else
              (cons '(NO REWARD BUT MOVE) 0.0))))))
-	
-
 
 ; Create an initial state
 (define create-initial-state

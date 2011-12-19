@@ -91,6 +91,7 @@
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{listings}
 
 \newcommand{\mycomment}[1]{{\color{blue} #1}}
 
@@ -206,12 +207,31 @@ Competition between browser vendors has in recent years taken place on the perfo
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
 This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
-\subsection*{•}
-Stochastic JavaScript implements three properties of Church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
+\subsection*{Stochastic Javascript Implementation}
+Stochastic JavaScript implements three properties of church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
 
-Code snippet \ref{fig:poisson} demonstrates the implementation of a elementary random primitive of a discrete poisson distribution.
+Code snippet \ref{fig:poissonRnd} demonstrates the implementation of an Elementary Random Primitive of a discrete Poisson distribution and is equivalent to the \verb+(poisson lambda)+ function found in Church.
 
-Code snippet \ref{fig:query} demonstrates a simple rejection sampling implementation of query.
+\ref{fig:sif} is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={A random ERP for Poisson distributions},label=poissonRnd]
+var poissionRnd = function (lambda) {
+        var L = Math.exp(-lambda);
+        var k = 0;
+        var p = 1;
+        do {
+            k = k + 1;
+            p = p * Math.random();
+        }
+        while (p > L);
+        return k - 1;
+    }
+\end{lstlisting}
+
+\subsection*{query}
+To support conditional inference Church generalises evaluation to \textit{conditional simulation} \cite{VIKASH}
+\verb+QUERY+ expressions in Church Code snippet \ref{fig:query} demonstrates a simple rejection sampling implementation of query.
 The function calls itself recursively until the predicate returns true.
 The function \verb+lexQuery+ implements a lexicalised version of query, which for purposes of convenience allows the construction of a world by specifying a object of lexicons describing the world.
 
