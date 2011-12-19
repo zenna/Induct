@@ -25,7 +25,8 @@
 ; 
 (define do-learning
   (lambda (current-time state possible-actions state-queries)
-    (let* ((current-model (select-model 1.0 state-queries)))
+    (let* ((current-model (select-model 1.0 state-queries))
+           (best-model (sparse-sampling current-model state)))
       (begin
         (display current-time)
         (display "\n")       
@@ -55,31 +56,5 @@
 ;   (create-initial-state size-x size-y start-pos-x start-pos-y)
 ;   possible-actions
 ;   state-queries))
-
-
-; Model for wicked world
-(define test-model2
-  (lambda (state action state-queries)
-    (let* ((world-size ((list-ref state-queries 1) state))
-           (agent-position ((list-ref state-queries 2) state))
-           (agent-new-position
-            (cons (cond ((equal? action 'move-right)
-                         (+ (car agent-position) 1))
-                        ((equal? action 'move-left)
-                         (- (car agent-position) 1))
-                        (else
-                         (car agent-position)))
-                  (cond ((equal? action 'move-up)
-                         (+ (cdr agent-position) 1))
-                        ((equal? action 'move-down)
-                         (- (cdr agent-position) 1))
-                        (else
-                         (cdr agent-position))))))
-      (cond ((invalid-pos? agent-new-position world-size)
-             (cons '(KEEP CURRENT POSITION) 0.0))
-            ((on-perimeter? agent-new-position world-size)
-             (cons '(CREATE STATE FROM NEW POSITION) 1.0))
-            (else
-             (cons '(NO REWARD BUT MOVE) 0.0))))))
 
 (test-model2 (create-initial-state 10 20 1 1) 'move-left (list can-continue? get-world-size get-agent-position))
