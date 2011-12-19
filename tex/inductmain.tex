@@ -187,7 +187,9 @@ This combination of language and implementation properties make JavaScript parti
 \subsection*{•}
 Stochastic JavaScript implements three properties of church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
 
-Code figure\ref{fig:query} demonstrates a simple implementation of query.
+Code snippet \ref{fig:poisson} demonstrates the implementation of a elementary random primitive of a discrete poisson distribution.
+
+Code snippet \ref{fig:query} demonstrates a simple rejection sampling implementation of query.
 The function calls itself recursively until the predicate returns true.
 The function \verb+lexQuery+ implements a lexicalised version of query, which for purposes of convenience allows the construction of a world by specifying a object of lexicons describing the world.
 
@@ -272,6 +274,42 @@ Taking example from \cite{VIKASH's} thesis,
 
 \section*{RLChurch}
 RL churched is designed to be agnostic to the domain of the problem.
+
+\begin{figure}[H]
+\begin{verbatim}
+(define do-learning
+  (lambda (current-time state possible-actions state-queries)
+    (cond
+      (((list-ref state-queries 0) current-time state)
+       (let* ((current-model (select-model 1.0 state-queries))
+              (num-samples 3)
+              (depth 3)
+              (discount .7)
+              (best-action (sparse-sampling depth num-samples discount current-model state possible-actions state-queries)))
+         (begin
+           (display current-time)
+           (display "\n")
+           (display best-action)
+           ((do-learning (+ 1 current-time) state possible-actions state-queries)))))
+       (else
+        (display "Game over")))))
+        
+(display "starting world\n")
+(let ((size-x 10)
+      (size-y 10)
+      (start-pos-x 2)
+      (start-pos-y 2)
+      (state-queries (list can-continue? get-world-size get-agent-position))
+      (possible-actions  '(move-up move-down move-left move-right)))
+  (do-learning
+   0
+   (create-initial-state size-x size-y start-pos-x start-pos-y)
+   possible-actions
+   state-queries))
+\end{verbatim}
+\caption{Main algorithm of RL-Church}
+ \label{fig:query}
+\end{figure}
 
 
 \bibliographystyle{siam}
