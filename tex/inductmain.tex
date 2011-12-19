@@ -90,6 +90,7 @@
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{listings}
 
 \newcommand{\mycomment}[1]{{\color{blue} #1}}
 
@@ -120,6 +121,11 @@ Probabilistic program induction, model-based reinforcement learning, Church, Jav
 
 \section{Introduction}
 Reinforcement learning (RL) is a successful field of machine learning that has enjoyed much practical application, and is often the method of choice when acting in unknown or partially-unknown environments.
+
+However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. Consider the finite-state automaton in Figure 1.
+We made this agent with church and he learned everything.
+Well done, agent.
+
 However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. 
 Consider the finite-state automaton in Figure 1 (drawn from \cite{Dearden98-bayesianq-learning}).\begin{figure}
 \includegraphics[scale=.7]{chain}
@@ -140,15 +146,48 @@ Church is a probabilistic programming language that allows for flexible, composi
 Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
 Most of this work uses a program length prior to learn concise models from data.
 This framework seems well suited to the problem at hand; the length prior prefers structured models that abstract over states and actions.
+<<<<<<< HEAD
 
 Both probabilistic programming and Bayesian RL pose significant computational difficulties. Bayesian RL requires that one maintain a posterior distribution over possible world models, which we model using Church programs. 
 Exact action selection in Bayesian RL requires exact planning, which is impossible for infinite horizon problems and intractable for finite horizon problems.
 We use sparse sampling for action selection, which maintains our Bayesian approach while making planning tractable.
 Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable. 
 We use 
+=======
+\\
+Both probabilistic programming and Bayesian RL face significant computational difficulties. B
+
+\subsection*{Stochastic Javascript}
+To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
+JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
+In spite of its name, it bears little semantic resemblance to Java and instead derives many of its ideas from Scheme, with support for first class functions, closures, lambda expressions and an $eval$ procedure to evaluate dynamically generated code.
+It also offers many of the features associated with more commonly used imperative languages, such as a prototypical object model, the modification of state, and the ability to introduce side-effects in functions.
+
+Competition between browser vendors has in recent years taken place on the performance front, leading to a tremendous increase in the speed of JavaScript implementations, which now routinely outperform other interpreted languages in benchmark tests.
+A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
+In JIT compilers
+
+This combination of language and implementation properties make JavaScript particularly attractive for this kind of domain
+
+Due to JIT and other run-time optimisations, anecdotal evidence has even demonstrated JavaScript outperforming natively compiled code for certain classes of task.
+Program induction
+
+
+
+\lstset{language=C++}
+\begin{verbatim}
+var genExp = function() {
+	if (flip(0.4)) {
+		return [flip(0.5) ? ["add",2]:["minus",2]].concat(genExp(),genExp());
+	}
+	else {
+		return [[1 + sampleInteger(10),-1]];
+	}
+}
+\end{verbatim}
+>>>>>>> 63a090b9623fbd3789e240fb9ecbeedcf5dea43d
 
 \bibliographystyle{siam}
 \bibliography{induct}
-
 
 \end{document}
