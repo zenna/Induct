@@ -180,10 +180,13 @@ A \emph{generative model} is a probability distribution $p: S\times A \to S\time
 Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use normal methods to solve it. 
 \subsection*{Probabilistic Program Induction}
 Probabilistic program induction techniques attempt to learn programs from data. 
+We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
+Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the posterior probability distribution over programs.
 \subsection*{Church}
 Church is an extension of the programming language Scheme to allow stochastic functions.
 It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
-Recent work has focused on probabilistic program induction using Church.
+A flurry of recent work has focused on probabilistic program induction using Church.
+\subsection*{Javascript}
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
 JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
