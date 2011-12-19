@@ -26,7 +26,8 @@
 (define do-learning
   (lambda (current-time state possible-actions state-queries)
     (let* ((current-model (select-model 1.0 state-queries))
-           (best-model (sparse-sampling current-model state)))
+           (num-samples 3)
+           (best-action (sparse-sampling depth num-samples discount model state possible-actions)))
       (begin
         (display current-time)
         (display "\n")       
@@ -45,16 +46,14 @@
 
 ; Let's roll
 (display "starting world\n")
-;(let ((size-x 10)
-;      (size-y 10)
-;      (start-pos-x 0)
-;      (start-pos-y 0)
-;      (state-queries (list can-continue? get-world-size get-agent-position))
-;      (possible-actions (list '(move-up move-down move-left move-right))))
-;  (do-learning
-;   0
-;   (create-initial-state size-x size-y start-pos-x start-pos-y)
-;   possible-actions
-;   state-queries))
-
-(test-model2 (create-initial-state 10 20 1 1) 'move-left (list can-continue? get-world-size get-agent-position))
+(let ((size-x 10)
+      (size-y 10)
+      (start-pos-x 0)
+      (start-pos-y 0)
+      (state-queries (list can-continue? get-world-size get-agent-position))
+      (possible-actions (list '(move-up move-down move-left move-right))))
+  (do-learning
+   0
+   (create-initial-state size-x size-y start-pos-x start-pos-y)
+   possible-actions
+   state-queries))
