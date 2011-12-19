@@ -109,12 +109,13 @@
 \begin{abstract}
 Model-based reinforcement learning is a powerful method for acting in unknown environments, but most approaches require specific, limiting assumptions about the world model.
 Probabilistic program induction promises flexible, universal learning from data.
-We present a principled method for inducing and using adaptive generative models in reinforcement learning. 
+We present an outline of a method for inducing and using adaptive generative models in reinforcement learning. 
 The approach is to learn probabilistic models from experience and choose actions by sparse sampling.
+We describe several systems we have built towards this goal.
 \end{abstract}
 
 \begin{keywords}
-Probabilistic program induction, model-based reinforcement learning, Church
+Probabilistic program induction, model-based reinforcement learning, Church, Javascript
 \end{keywords}
 
 \section{Introduction}
@@ -126,22 +127,26 @@ Consider the finite-state automaton in Figure 1 (drawn from \cite{Dearden98-baye
 \end{figure}
 The task is difficult because before the agent reaches the fifth stage, all of the evidence received suggests that the best strategy is to remain at the first state.
 Yet it seems clear that the potential rewards are sufficient to warrant visiting each state.
-This is an example of the \emph{exploration-exploitation tradeoff}: to maximize final reward, when should one decide to quit roaming and settle down?\\
+This is an example of the \emph{exploration-exploitation tradeoff}: to maximize final reward, when should one decide to quit roaming and settle down?
 
 Recent work has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
 
 What could account for such dramatic differences?
 Humans seem to perform very well on problems with clear structure, possessing a strong inductive bias towards simplicity.
 Conversely, human performance is very poor in general RL environments. 
-\\
 
 To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
 Church is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
 Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
 Most of this work uses a program length prior to learn concise models from data.
 This framework seems well suited to the problem at hand; the length prior prefers structured models that abstract over states and actions.
-\\
-Both probabilistic programming and Bayesian RL face significant computational difficulties. B
+
+Both probabilistic programming and Bayesian RL pose significant computational difficulties. Bayesian RL requires that one maintain a posterior distribution over possible world models, which we model using Church programs. 
+Exact action selection in Bayesian RL requires exact planning, which is impossible for infinite horizon problems and intractable for finite horizon problems.
+We use sparse sampling for action selection, which maintains our Bayesian approach while making planning tractable.
+Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable. 
+We use 
+
 \bibliographystyle{siam}
 \bibliography{induct}
 
