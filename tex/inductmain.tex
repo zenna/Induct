@@ -80,7 +80,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
-
+%% bibtex
+\usepackage{natbib}
 %% Math packages
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -141,7 +142,7 @@ Recent work (Green et al., unpublished) has shown that humans perform very well 
 What could account for such dramatic differences?
 Humans seem to perform very well on problems with clear structure, possessing a strong inductive bias towards simplicity.
 Conversely, human performance is very poor in general RL environments (Doshi-Velez \& Gahramani, 2010). 
-
+\citep{dearden}
 To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
 Church (Goodman et al., 2008) is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
 Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
@@ -194,7 +195,7 @@ The early stages of exploration will be essentially random;  as it collects more
 
 We view our proposal as having two main advantages. First, it is in some sense fully Bayesian. Rather than make point estimates at any step, we sample directly from the posterior distribution over the quantities of interest. Second, although it is most likely computationally intractable for any but the simplest RL problems, it provides a framework for exploring further approximations to optimal Bayesian RL.
 To facilitate such exploration, we have developed several tools for probabilistic programming and reinforcement learning.
-
+\citep{Dearden98bayesianq-learning}
 
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
@@ -235,7 +236,6 @@ The function calls itself recursively until the predicate returns true.
 The function \verb+lexQuery+ implements a lexicalised version of query, which for purposes of convenience allows the construction of a world by specifying a object of lexicons describing the world.
 
 
-
 \begin{figure}[H]
 \begin{verbatim}
     // Knuth method
@@ -269,7 +269,7 @@ var sIf = function(noiseLevel, predicate, consequent, alternate) {
 }
 \end{verbatim}
 \caption{Stochastic if operator}
- \label{fig:sif}
+ \label{fig:poisson}
 \end{figure}
 
 \begin{figure}[H]
@@ -307,162 +307,14 @@ var lexQuery = function (lexicons, expression, predicate) {
  \label{fig:query}
 \end{figure}
 
-\begin{figure}[H]
-\begin{verbatim}
-// Knuth method
-var poissionRnd = function(database, logLikelihood,lambda) {
-	var currentParams = {type:'poissionRnd', theta:arguments};
-	
-	var name = generateNameFromStackTrace();
-	if (name in database && currentParams.type == dbParams.type) {
-		dbParmas = database[name];
-		if (currentParams.theta == dbParams.theta) {
-			logLikelihood = logLikelihood + dbParams.logLikelihood
-		}
-		else {
-			var l = Math.log(computeLikelihood());
-			database.name.l = l;
-			logLikelihood = logLikelihood + l;
-		}
-	}
-	else {
-		
-		
-	}
-	
-	var L = Math.exp(-lambda);
-	var k = 0;
-	var p = 1;
-	do {
-		k = k + 1;
-		p = p * Math.random();
-	}
-	while (p > L);
-	return k - 1;
-}
-\end{verbatim}
-\caption{Modified poission distribution for MCMC}
- \label{fig:tracepoisson}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{verbatim}
-    // Knuth method
-var poissionRnd = function (database, logLikelihood, lambda) {
-        var currentParams = {
-            type: 'poissionRnd',
-            theta: arguments
-        };
-
-        var name = generateNameFromStackTrace();
-        if (name in database && currentParams.type == dbParams.type) {
-            dbParmas = database[name];
-            if (currentParams.theta == dbParams.theta) {
-                logLikelihood = logLikelihood + dbParams.logLikelihood
-            } else {
-                var l = Math.log(computeLikelihood());
-                database.name.l = l;
-                logLikelihood = logLikelihood + l;
-            }
-        } else {
-
-
-        }
-
-        var L = Math.exp(-lambda);
-        var k = 0;
-        var p = 1;
-        do {
-            k = k + 1;
-            p = p * Math.random();
-        }
-        while (p > L);
-        return k - 1;
-    }
-\end{verbatim}
-\caption{Modified poission distribution for MCMC}
- \label{fig:tracepoisson}
-\end{figure}
-
-\begin{figure}[H]
-\begin{verbatim}
-var traceMetroplisHastings = function (program, numIterations) {
-        var initialOptions = {
-            databse: {},
-            logLikelihood: 0.0
-        };
-        traceOptions = traceUpdate(initialOptions, program);
-
-        for (var i = 0; i < numIterations; ++i) {
-            var randErpIndex = randomInteger(0, traceOptions.database.length - 1);
-            var randomErp = traceOptions.database; //TODO
-            // Sample a new value of x under a proposal
-            // Compute probability of going from x to x'
-            // Compute inverse probability
-            // Compute likelihood of x'
-            newTraceOptions = traceOptions;
-            newTraceOptions.dictionary[name].x = xPrime;
-            newTraceOptions.dictionary[name].logLikelihood = logLikelihoodPrime;
-            newDictionary = traceOptions.dictionary.copy();
-            if (Math.log(Math.random()) < newOptions.logLikelihood - traceOptions.logLikelihood + R - F) {
-                traceOptions = newTraceOptions;
-            }
-            // Record samples
-        }
-    }
-
-var traceUpdate = function (traceOptions, program) {
-        traceOptions.loglikelihood = 0.0;
-        var database = traceOptions.database;
-        program.call(database);
-    }
-\end{verbatim}
-\caption{Metropolis Hastings}
- \label{fig:trace}
-\end{figure}
-
-\subsection*{Simple Program Induction}
-Taking example from \cite{VIKASH's} thesis, figure \ref{fig:programinduct} demonstrates a simple example of program induction in stochastic JavaScript.
-A probabilistic program which generates simple programs is queried, conditioning on the generated program producing the desired output.
-
-\begin{figure}
-\begin{verbatim}
-var genExp = function () {
-        if (flip(0.4)) {
-            return [flip(0.5) ? ["add", 2] : ["minus", 2]].concat(genExp(), genExp());
-        } else {
-            return [[1 + sampleInteger(10), -1]];
-        }
-    }
-
-var inductProgram = function() {
-	return lexQuery([function() {return genExp()}],
-					function(exp) {return [exp]},
-					function(exp) {return runJsExpr(exp) == 24})
-}
-
-
-\end{verbatim}
-\caption{Simple Program Induction}
- \label{fig:programinduct}
-\end{figure}
 
 \section*{Implementation details of RL-Church}
 RL churched is designed to be agnostic to the domain of the problem.
 The main algorithm, demonstrated as Church code in \ref{fig:mainalgo} takes as input a state, a list of possible actions, and \verb+state-queries+ list of possible queries to that state.
-One important detail is the layer of abstraction afforded with the use of \verb+state-queries+.
+Our important detail is the layer of abstraction afforded with the use of \verb+state-queries+.
 Although all observable state structure is contained within the \verb+state+ structure, all probing of the world must operate through the functions within \verb+state-queries+.
 This allows us to modify our representation of the world, without having to modify our main learning algorithms.
 It is also this set of functions, which are used in program induction to interrogate the state and learn regularities.
-
-Snippet \ref{fig:sparsesample} demonstrates the procedures used to implement sparse sampling.
-We use the recursive algorithm \verb+sum-rewards+ to implement the summation of $C$ samples over possible future paths in the sparse sampling tree, effectively implementing 
-\begin{equation}
-\hat{Q_h}(s,a) = \frac{1}{C} \sum_{s^\prime \in S_a} R(s,a) + \gamma EstimateV(h-1 ,G ,\gamma , s^\prime) 
-\end{equation}
-where $G$ is the learned generative model represented as a probabilistic program.
-
 
 \begin{figure}[H]
 \begin{verbatim}
@@ -500,6 +352,7 @@ where $G$ is the learned generative model represented as a probabilistic program
  \label{fig:mainalgo}
 \end{figure}
 
+\ref{fig:sparsesample}
 
 \begin{figure}[H]
 \begin{verbatim}
