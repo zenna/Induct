@@ -1,10 +1,3 @@
-;Do following until can't continue
- ;Select a model
- ;Do sparse sampling with model
- ;Select action
- ;Transition to new state
- ;Update model
-
 ; This model:
 ; Assumes world only changes when I take an action
 
@@ -15,30 +8,78 @@
 (load "domain.scm")
 (load "sparsesampling.scm")
 
-; Select a model								
+; Select a model
+; State-queries should give us a list of possible queries we can perform on environment		
 (define select-model
-	(lambda (observed-data)
-		(test-model))) ;Bayesian Magic Here
+  (lambda (observed-data state-queries)
+    test-model)) ;Bayesian Magic Here
 
-; One solution is provide a function state-queries which returns functiosn which give information about state
+; One solution is provide a function state-queries which returns functions which give information about state
+; can call these by name
+; Or we could provide a list of functions, but then we cant reference them ( do we need to?)
 ; Problem is select-model doesnt know what actions are possible
+
+; The goal here is 1. To have select-model has some access to a finite number of functions which it can call
+; I need to be able to query teh state, 
+; If i make state-queries a list of functions that operate on state
+; 
 (define do-learning
-	(lambda (current-time state possible-actions state-queries)
-		(cond
-			((state-queries 'can-continue?) current-time state)
-			(begin
-				(define current-model (select-model observed-data state-queries))
-				(define best-action (sparse-sampling current-model current-state))
-				(define state-reward (execute-action best-action))
-				((do-learning (car state-reward) (+ 1 current-time)))))))	
+  (lambda (current-time state possible-actions state-queries)
+    (let* ((current-model (select-model 1.0 state-queries)))
+      (begin
+        (display current-time)
+        (display "\n")       
+    ;(best-action (sparse-sampling current-model state))
+    ;(state-reward (execute-action best-action)))
+        (cond
+          (((list-ref state-queries 0) current-time state)
+           ((do-learning (+ 1 current-time) state possible-actions state-queries)))
+          (else
+           (display "condition failed")))))))
+  
+
+(define execute-action
+  (lambda (action)
+    (cons ("state") (1.0))))
 
 ; Let's roll
-(let ((size-x 10)
-	  (size-y 10)
-	  (start-pos-x 0)
-	  (start-pos-y 0))
-	(do-learning
-		0 
-		(create-initial-state size-x size-y start-pos-x start-pos-y)
-		possible-actions
-		state-queries))
+(display "starting world\n")
+;(let ((size-x 10)
+;      (size-y 10)
+;      (start-pos-x 0)
+;      (start-pos-y 0)
+;      (state-queries (list can-continue? get-world-size get-agent-position))
+;      (possible-actions (list '(move-up move-down move-left move-right))))
+;  (do-learning
+;   0
+;   (create-initial-state size-x size-y start-pos-x start-pos-y)
+;   possible-actions
+;   state-queries))
+
+
+; Model for wicked world
+(define test-model2
+  (lambda (state action state-queries)
+    (let* ((world-size ((list-ref state-queries 1) state))
+           (agent-position ((list-ref state-queries 2) state))
+           (agent-new-position
+            (cons (cond ((equal? action 'move-right)
+                         (+ (car agent-position) 1))
+                        ((equal? action 'move-left)
+                         (- (car agent-position) 1))
+                        (else
+                         (car agent-position)))
+                  (cond ((equal? action 'move-up)
+                         (+ (cdr agent-position) 1))
+                        ((equal? action 'move-down)
+                         (- (cdr agent-position) 1))
+                        (else
+                         (cdr agent-position))))))
+      (cond ((invalid-pos? agent-new-position world-size)
+             (cons '(KEEP CURRENT POSITION) 0.0))
+            ((on-perimeter? agent-new-position world-size)
+             (cons '(CREATE STATE FROM NEW POSITION) 1.0))
+            (else
+             (cons '(NO REWARD BUT MOVE) 0.0))))))
+
+(test-model2 (create-initial-state 10 20 1 1) 'move-left (list can-continue? get-world-size get-agent-position))

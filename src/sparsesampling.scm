@@ -2,4 +2,4 @@
 ; model f(state,action) -> (newsate,reward)
 (define sparse-sampling
 	(lambda (model state)
-		(X)))
+		1.0))
