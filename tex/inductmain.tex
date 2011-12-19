@@ -91,7 +91,6 @@
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage{listings}
 
 \newcommand{\mycomment}[1]{{\color{blue} #1}}
 
@@ -125,7 +124,7 @@ Probabilistic program induction, model-based reinforcement learning, Church, Sto
 \section{Introduction}
 Reinforcement learning (RL) is a successful field of machine learning that has enjoyed much practical application, and is often the method of choice when acting in unknown or partially-unknown environments.
 However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. 
-Consider the finite-state automaton in Figure 1 (drawn from Dearden et al., 1998).\begin{figure}
+Consider the finite-state automaton in Figure 1 (drawn from \citet{dearden}).\begin{figure}
 \begin{center}
 
 \includegraphics[scale=.4]{chain}
@@ -135,27 +134,27 @@ Consider the finite-state automaton in Figure 1 (drawn from Dearden et al., 1998
 \end{figure}
 The task is difficult because before the agent reaches the fifth stage, all of the evidence received suggests that the best strategy is to remain at the first state.
 Yet it seems clear that the potential rewards are sufficient to warrant visiting each state.
-This is an example of the \emph{exploration-exploitation tradeoff}: to maximize final reward, when should one decide to quit roaming and settle down?
+This is an example of the \emph{exploration-exploitation tradeoff}\citep{wolpert}: to maximize final reward, when should one decide to quit roaming and settle down?
 
-Recent work (Green et al., unpublished) has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
+Recent work \citep{shawn} has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
 
 What could account for such dramatic differences?
 Humans seem to perform very well on problems with clear structure, possessing a strong inductive bias towards simplicity.
-Conversely, human performance is very poor in general RL environments (Doshi-Velez \& Gahramani, 2010). 
-\citep{dearden}
+Conversely, human performance is very poor in arbitrarily general RL environments \citep{finale}. 
+
 To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
-Church (Goodman et al., 2008) is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
-Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
-Most of this work uses a program length prior to learn concise models from data.
+Church \citep{church} is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
+Since its release, there has been steadily increasing interest in Bayesian program induction using Church\citep{hwang}.
+This work uses a program length prior to learn concise models from data.
 This framework seems well suited to the problem at hand; the length prior prefers structured models that abstract over states and actions, without specifying their precise form.
 
 Both probabilistic programming and Bayesian RL pose significant computational difficulties. Bayesian RL requires that one maintain a posterior distribution over possible world models, which we represent using Church programs. 
-Exact action selection in Bayesian RL requires exact planning, which is impossible for infinite horizon problems and intractable for finite horizon problems.
-We use sparse sampling for action selection, which maintains our Bayesian approach while making planning tractable.
-Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable. 
+Exact action selection in Bayesian RL requires exact planning, which is impossible for infinite horizon problems and intractable for finite horizon problems \citep{puterman}.
+We use sparse sampling for action selection, which maintains our Bayesian approach while making planning tractable \citep{kearns}.
+Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable\citep{vikash}. 
 We use two strategies to enable computation.
-Rather than attempt to model the posterior probability directly, we draw (approximate) samples from the posterior distribution; this is a ubiquitous strategy in machine learning and computational statistics. 
-To find high-probability programs, we use heuristics that favor abstraction (drawn from Hwang et al., 2011).
+Rather than attempt to model the posterior probability directly, we draw (approximate) samples from the posterior distribution; this is a ubiquitous strategy in machine learning and computational statistics \citep{mackay}. 
+To find high-probability programs, we use heuristics that favor abstraction (drawn from \citet{hwang}).
 
 The plan of the paper is as follows. 
 In Section 2, we review background material. 
@@ -165,28 +164,27 @@ In Section 5, we describe Stochastic Javascript, an extension of the Javascript 
 To conclude, we discuss possible applications and future research directions.
 \section{Background}
 \subsection*{Reinforcement Learning}
-Reinforcement learning (RL) is a formalization of the problem of learning to behave optimally in unknown environments. An environment is a tuple $(S,A,T,R)$, where $S$ is a set of \emph{states}, $A$ is a set of (possibly state-dependent) \emph{actions}, $T: S\times A \to S$ is a stochastic state \emph{transition function}, and $R: S\times A -> \mathbb{R}$ is the \emph{reward} of taking action $a$ in state $s$.
+Reinforcement learning (RL) is a formalization of the problem of learning to behave optimally in unknown environments\citep{suttonbarto}. An environment is a tuple $(S,A,T,R)$, where $S$ is a set of \emph{states}, $A$ is a set of (possibly state-dependent) \emph{actions}, $T: S\times A \to S$ is a stochastic state \emph{transition function}, and $R: S\times A -> \mathbb{R}$ is the \emph{reward} of taking action $a$ in state $s$.
 
 The classical theory of RL typically solves the problem by estimating $(R,T,A)$ and using techniques from the theory of MDPs (see below). This effectively disregards the exploration aspect of the tradeoff mentioned above . Other techniques try to estimate and incorporate the \emph{value of perfect information} and other heuristics to encourage exploration.
 \subsection*{Markov Decision Processes}
-Markov Decision Processes (MDPs) (Puterman 2005) are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. For small MDPs, this is straightforward; algorithms for exact calculation have been known since the 1950s. For large MDPs,  approximate techniques are required. Sparse sampling is one such method.
+Markov Decision Processes (MDPs) \citep{puterman} are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. For small MDPs, this is straightforward; algorithms for exact calculation have been known since the 1950s. For large MDPs,  approximate techniques are required. Sparse sampling is one such method.
 \subsection*{Sparse Sampling}
-Sparse sampling is a method for choosing actions to maximize rewards in MDPs for which the learning agent has a generative model of the world. 
+Sparse sampling \citep{kearns} is a method for choosing actions to maximize rewards in MDPs for which the learning agent has a generative model of the world. 
 A \emph{generative model} is a probability distribution $p: S\times A \to S\times \mathbb{R}$ that, given a state and action, returns a new state and a reward. 
 Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use standard methods to solve it. 
 \subsection*{Probabilistic Program Induction}
 Probabilistic program induction techniques attempt to learn programs from data. 
 We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
-Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the posterior probability distribution over programs.
+Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the posterior probability distribution over programs \citep{hwang}.
 \subsection*{Church}
-Church (Goodman et al, 2008) is an extension of the programming language Scheme to allow stochastic functions.
+Church \citep{church} is an extension of the programming language Scheme to allow stochastic functions.
 It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
-A flurry of recent work (see http://projects.csail.mit.edu/church/wiki/Church) has focused on probabilistic program induction using Church.
-
+A flurry of recent work (see the Church Wiki) has focused on probabilistic program induction using Church.
 
 \section{Model-Based Reinforcement Learning by Probabilistic Program Induction}
 To encourage generalization and abstraction for model-based RL, we propose to induce Church programs as models of the world. 
-Following Hwang et al. (2011), we choose a program length prior $p(M)\propto \exp(-\alpha |M|)$ and estimate the likelihood $p(D|M)$ by a combination of brute-force frequency estimation of and analytic evaluation given the model. 
+Following \citep{hwang}, we choose a program length prior $p(M)\propto \exp(-\alpha |M|)$ and estimate the likelihood $p(D|M)$ by a combination of brute-force frequency estimation of and analytic evaluation given the model. 
 Samples are drawn from the posterior $p(M|D)\propto p(D|M) p(M)$ using Markov Chain Monte Carlo, using search moves that favor abstraction and deargumentation.
 For each step taken by the RL agent, we draw a number of program samples $p$ from $p(M|D$, and draw state-action-reward sample trajectories from the generative model specified by each program.
 
@@ -195,7 +193,6 @@ The early stages of exploration will be essentially random;  as it collects more
 
 We view our proposal as having two main advantages. First, it is in some sense fully Bayesian. Rather than make point estimates at any step, we sample directly from the posterior distribution over the quantities of interest. Second, although it is most likely computationally intractable for any but the simplest RL problems, it provides a framework for exploring further approximations to optimal Bayesian RL.
 To facilitate such exploration, we have developed several tools for probabilistic programming and reinforcement learning.
-\citep{Dearden98bayesianq-learning}
 
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
@@ -207,31 +204,12 @@ Competition between browser vendors has in recent years taken place on the perfo
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
 This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
-\subsection*{Stochastic Javascript Implementation}
-Stochastic JavaScript implements three properties of church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
+\subsection*{•}
+Stochastic JavaScript implements three properties of Church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
 
-Code snippet \ref{fig:poissonRnd} demonstrates the implementation of an Elementary Random Primitive of a discrete Poisson distribution and is equivalent to the \verb+(poisson lambda)+ function found in Church.
+Code snippet \ref{fig:poisson} demonstrates the implementation of a elementary random primitive of a discrete poisson distribution.
 
-\ref{fig:sif} is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
-
-\lstset{language=C}
-\begin{lstlisting}[caption={A random ERP for Poisson distributions},label=poissonRnd]
-var poissionRnd = function (lambda) {
-        var L = Math.exp(-lambda);
-        var k = 0;
-        var p = 1;
-        do {
-            k = k + 1;
-            p = p * Math.random();
-        }
-        while (p > L);
-        return k - 1;
-    }
-\end{lstlisting}
-
-\subsection*{query}
-To support conditional inference Church generalises evaluation to \textit{conditional simulation} \cite{VIKASH}
-\verb+QUERY+ expressions in Church Code snippet \ref{fig:query} demonstrates a simple rejection sampling implementation of query.
+Code snippet \ref{fig:query} demonstrates a simple rejection sampling implementation of query.
 The function calls itself recursively until the predicate returns true.
 The function \verb+lexQuery+ implements a lexicalised version of query, which for purposes of convenience allows the construction of a world by specifying a object of lexicons describing the world.
 
