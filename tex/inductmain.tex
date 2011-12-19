@@ -135,14 +135,14 @@ The task is difficult because before the agent reaches the fifth stage, all of t
 Yet it seems clear that the potential rewards are sufficient to warrant visiting each state.
 This is an example of the \emph{exploration-exploitation tradeoff}: to maximize final reward, when should one decide to quit roaming and settle down?
 
-Recent work has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
+Recent work (Green et al., unpublished) has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
 
 What could account for such dramatic differences?
 Humans seem to perform very well on problems with clear structure, possessing a strong inductive bias towards simplicity.
-Conversely, human performance is very poor in general RL environments. 
+Conversely, human performance is very poor in general RL environments (Doshi-Velez \& Gahramani, 2010). 
 
 To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
-Church is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
+Church (Goodman et al., 2008) is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
 Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
 Most of this work uses a program length prior to learn concise models from data.
 This framework seems well suited to the problem at hand; the length prior prefers structured models that abstract over states and actions, without specifying their precise form.
@@ -153,7 +153,7 @@ We use sparse sampling for action selection, which maintains our Bayesian approa
 Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable. 
 We use two strategies to enable computation.
 Rather than attempt to model the posterior probability directly, we draw (approximate) samples from the posterior distribution; this is a ubiquitous strategy in machine learning and computational statistics. 
-To find high-probability programs, we use heuristics that favor abstraction (drawn from :::::Hwang et al::::).
+To find high-probability programs, we use heuristics that favor abstraction (drawn from Hwang et al., 2011).
 
 The plan of the paper is as follows. 
 In Section 2, we review background material. 
@@ -177,13 +177,21 @@ Probabilistic program induction techniques attempt to learn programs from data.
 We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
 Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the posterior probability distribution over programs.
 \subsection*{Church}
-Church is an extension of the programming language Scheme to allow stochastic functions.
+Church (Goodman et al, 2008) is an extension of the programming language Scheme to allow stochastic functions.
 It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
-A flurry of recent work has focused on probabilistic program induction using Church.
+A flurry of recent work (see http://projects.csail.mit.edu/church/wiki/Church) has focused on probabilistic program induction using Church.
 
 
 \section{Model-Based Reinforcement Learning by Probabilistic Program Induction}
-To encourage generalization and abstraction for model-based RL, we propose to induce Church programs as models of the world. Following  
+To encourage generalization and abstraction for model-based RL, we propose to induce Church programs as models of the world. 
+Following Hwang et al. (2011), we choose a program length prior $p(M)\propto \exp(-\alpha |M|)$ and estimate the likelihood $p(D|M)$ by a combination of brute-force frequency estimation of and analytic evaluation given the model. 
+Samples are drawn from the posterior $p(M|D)\propto p(D|M) p(M)$ using Markov Chain Monte Carlo, using search moves that favor abstraction and deargumentation.
+For each step taken by the RL agent, we draw a number of program samples $p$ from $p(M|D$, and draw state-action-reward sample trajectories from the generative model specified by each program.
+Sparse sampling is used to calculate the posterior distribution over actions (combining the sample trajectories from all  sampled programs), which we sample from to specify the agent's decision. 
+The early stages of exploration will be essentially random;  as it collects more data, we expect the agent to both make better predictions of transition and reward probabilities and to better predict the properties of as yet unobserved states.
+We view our proposal as having two main advantages. First, it is in some sense fully Bayesian. Rather than make point estimates at any step, we sample directly from the posterior distribution over the quantities of interest. Second, although it is most likely computationally intractable for any but the simplest RL problems, it provides a framework for exploring further approximations to optimal Bayesian RL.
+To facilitate such exploration, we have developed several tools for probabilistic programming and reinforcement learning.
+
 
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
@@ -195,8 +203,9 @@ Competition between browser vendors has in recent years taken place on the perfo
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
 This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
-\subsection*{Implementation}
+\subsection*{Stochastic Javascript mplementation details}
 Stochastic JavaScript implements three properties of church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
+
 
 Code snippet \ref{fig:poisson} demonstrates the implementation of an elementary random primitive of a discrete poisson distribution and is equivalent to the \verb+poisson+ function found in church.
 \ref{fig:sif} is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
