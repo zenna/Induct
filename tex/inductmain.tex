@@ -187,8 +187,10 @@ To encourage generalization and abstraction for model-based RL, we propose to in
 Following Hwang et al. (2011), we choose a program length prior $p(M)\propto \exp(-\alpha |M|)$ and estimate the likelihood $p(D|M)$ by a combination of brute-force frequency estimation of and analytic evaluation given the model. 
 Samples are drawn from the posterior $p(M|D)\propto p(D|M) p(M)$ using Markov Chain Monte Carlo, using search moves that favor abstraction and deargumentation.
 For each step taken by the RL agent, we draw a number of program samples $p$ from $p(M|D$, and draw state-action-reward sample trajectories from the generative model specified by each program.
+
 Sparse sampling is used to calculate the posterior distribution over actions (combining the sample trajectories from all  sampled programs), which we sample from to specify the agent's decision. 
 The early stages of exploration will be essentially random;  as it collects more data, we expect the agent to both make better predictions of transition and reward probabilities and to better predict the properties of as yet unobserved states.
+
 We view our proposal as having two main advantages. First, it is in some sense fully Bayesian. Rather than make point estimates at any step, we sample directly from the posterior distribution over the quantities of interest. Second, although it is most likely computationally intractable for any but the simplest RL problems, it provides a framework for exploring further approximations to optimal Bayesian RL.
 To facilitate such exploration, we have developed several tools for probabilistic programming and reinforcement learning.
 
@@ -379,6 +381,9 @@ It is also this set of functions, which are used in program induction to interro
  \label{fig:sparsesample}
 \end{figure}
 
+\section{Conclusion}
+We have presented a proposal for a model-based reinforcement learning algorithm that employs probabilistic program induction to represent and induce flexible generative models.
+In addition, we have developed two tools for research along this lines. RL-Church is an implementation of reinforcement learning in the Church programming language. Stochastic Javascript is a probabilistic programming language suitable for fast computation and Internet data collection. 
 
 
 \bibliographystyle{siam}
