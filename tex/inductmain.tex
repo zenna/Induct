@@ -122,11 +122,6 @@ Probabilistic program induction, model-based reinforcement learning, Church, Sto
 
 \section{Introduction}
 Reinforcement learning (RL) is a successful field of machine learning that has enjoyed much practical application, and is often the method of choice when acting in unknown or partially-unknown environments.
-
-However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. Consider the finite-state automaton in Figure 1.
-We made this agent with church and he learned everything.
-Well done, agent.
-
 However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. 
 Consider the finite-state automaton in Figure 1 (drawn from \cite{Dearden98-bayesianq-learning}).\begin{figure}
 \begin{center}
@@ -176,7 +171,7 @@ Markov Decision Processes (MDPs) are a subset of RL problems; they assume that t
 \subsection*{Sparse Sampling}
 Sparse sampling is a method for choosing actions to maximize rewards in MDPs for which the learning agent has a generative model of the world. 
 A \emph{generative model} is a probability distribution $p: S\times A \to S\times \mathbb{R}$ that, given a state and action, returns a new state and a reward. 
-Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use normal methods to solve it. 
+Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use standard methods to solve it. 
 \subsection*{Probabilistic Program Induction}
 Probabilistic program induction techniques attempt to learn programs from data. 
 We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
@@ -185,6 +180,11 @@ Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the 
 Church is an extension of the programming language Scheme to allow stochastic functions.
 It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
 A flurry of recent work has focused on probabilistic program induction using Church.
+
+
+\section{Model-Based Reinforcement Learning by Probabilistic Program Induction}
+To encourage generalization and abstraction for model-based RL, we propose to induce Church programs as models of the world. Following  
+
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
 JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
