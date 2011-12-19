@@ -80,7 +80,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
-
+%% bibtex
+\usepackage{natbib}
 %% Math packages
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -140,7 +141,7 @@ Recent work (Green et al., unpublished) has shown that humans perform very well 
 What could account for such dramatic differences?
 Humans seem to perform very well on problems with clear structure, possessing a strong inductive bias towards simplicity.
 Conversely, human performance is very poor in general RL environments (Doshi-Velez \& Gahramani, 2010). 
-
+\citep{dearden}
 To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
 Church (Goodman et al., 2008) is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
 Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
@@ -193,7 +194,7 @@ The early stages of exploration will be essentially random;  as it collects more
 
 We view our proposal as having two main advantages. First, it is in some sense fully Bayesian. Rather than make point estimates at any step, we sample directly from the posterior distribution over the quantities of interest. Second, although it is most likely computationally intractable for any but the simplest RL problems, it provides a framework for exploring further approximations to optimal Bayesian RL.
 To facilitate such exploration, we have developed several tools for probabilistic programming and reinforcement learning.
-
+\citep{Dearden98bayesianq-learning}
 
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
