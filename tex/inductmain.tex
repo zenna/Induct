@@ -168,7 +168,12 @@ In Section 4, we describe RL-Church, a RL system based on the Church programming
 In Section 5, we describe Stochastic Javascript, an extension of the Javascript programming language.
 To conclude, we discuss possible applications and future research directions.
 \section{Background}
+\subsection*{Reinforcement Learning}
+Reinforcement learning (RL) is a formalization of the problem of learning to behave optimally in unknown environments. An environment is a tuple $(S,A,T,R)$, where $S$ is a set of \emph{states}, $A$ is a set of (possibly state-dependent) \emph{actions}, $T: S\times A \to S$ is a stochastic state \emph{transition function}, and $R: S\times A -> \mathbb{R}$ is the \emph{reward} of taking action $a$ in state $s$.
 
+The classical theory of RL typically solves the problem by estimating $(R,T,A)$ and using techniques from the theory of MDPs (see below). This effectively disregards the exploration aspect of the tradeoff mentioned above . Other techniques try to estimate and incorporate the \emph{value of perfect information} and other heuristics to encourage exploration.
+\subsection*{Markov Decision Processes}
+Markov Decision Processes (MDPs) are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act.  
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
 JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.

@@ -1,35 +1,35 @@
-(define mdp-solve
-  (lambda (type states actions transitions rewards discount)
-    (cond ((equal? type "value-iteration")
+;; (define mdp-solve
+;;   (lambda (type states actions transitions rewards discount)
+;;     (cond ((equal? type "value-iteration")
 
-           )
-          )
-    )
-  )
+;;            )
+;;           )
+;;     )
+;;   )
 
-(define update-V
-  (lambda (V states actions transitions rewards discount)
-    (map
-     (lambda (state)
-       (sum (
-             (map (lambda (x) (+
-                               (* discount
-                                        (list-ref V state)
+;; (define update-V
+;;   (lambda (V states actions transitions rewards discount)
+;;     (map
+;;      (lambda (state)
+;;        (sum (
+;;              (map (lambda (x) (+
+;;                                (* discount
+;;                                         (list-ref V state)
                                         
-                                     )
-                               x)
-                          )
+;;                                      )
+;;                                x)
+;;                           )
 
-                  (multiply transitions rewards)
-                  )
-             )
-            )
+;;                   (multiply transitions rewards)
+;;                   )
+;;              )
+;;             )
 
-       )
-     states
-     )
-    )
-  )
+;;        )
+;;      states
+;;      )
+;;     )
+;;   )
 
 (define transitions
   (lambda (s a)
@@ -87,7 +87,8 @@
     )
   )
 
-)
+
+
 (define values
   (lambda (express args)
 
