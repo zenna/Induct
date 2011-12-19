@@ -90,7 +90,6 @@
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage{listings}
 
 \newcommand{\mycomment}[1]{{\color{blue} #1}}
 
@@ -181,12 +180,11 @@ Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the 
 Church is an extension of the programming language Scheme to allow stochastic functions.
 It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
 A flurry of recent work has focused on probabilistic program induction using Church.
-\subsection*{Javascript}
-
 
 
 \section{Model-Based Reinforcement Learning by Probabilistic Program Induction}
 To encourage generalization and abstraction for model-based RL, we propose to induce Church programs as models of the world. Following  
+
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
 JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
@@ -195,27 +193,135 @@ It also offers many of the features associated with more commonly used imperativ
 
 Competition between browser vendors has in recent years taken place on the performance front, leading to a tremendous increase in the speed of JavaScript implementations, which now routinely outperform other interpreted languages in benchmark tests.
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
-In JIT compilers
+This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
-This combination of language and implementation properties make JavaScript particularly attractive for this kind of domain
+\subsection*{•}
+Stochastic JavaScript implements three properties of church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
 
-Due to JIT and other run-time optimisations, anecdotal evidence has even demonstrated JavaScript outperforming natively compiled code for certain classes of task.
-Program induction
+Code snippet \ref{fig:poisson} demonstrates the implementation of a elementary random primitive of a discrete poisson distribution.
+
+Code snippet \ref{fig:query} demonstrates a simple rejection sampling implementation of query.
+The function calls itself recursively until the predicate returns true.
+The function \verb+lexQuery+ implements a lexicalised version of query, which for purposes of convenience allows the construction of a world by specifying a object of lexicons describing the world.
 
 
-
-\lstset{language=C++}
+\begin{figure}[H]
 \begin{verbatim}
-var genExp = function() {
-	if (flip(0.4)) {
-		return [flip(0.5) ? ["add",2]:["minus",2]].concat(genExp(),genExp());
+    // Knuth method
+var poissionRnd = function (lambda) {
+        var L = Math.exp(-lambda);
+        var k = 0;
+        var p = 1;
+        do {
+            k = k + 1;
+            p = p * Math.random();
+        }
+        while (p > L);
+        return k - 1;
+    }
+\end{verbatim}
+\caption{Knuth method of elementary random primitive for poission distribution}
+ \label{fig:poisson}
+\end{figure}
+
+\begin{figure}[H]
+\begin{verbatim}
+// Stochastic if operator 
+var sIf = function(noiseLevel, predicate, consequent, alternate) {		
+	noisyPredicate = flip(noiseLevel) ? predicate : !predicate;
+	if (noisyPredicate) {
+		return consequent ;
 	}
 	else {
-		return [[1 + sampleInteger(10),-1]];
+		return alternate;
 	}
 }
 \end{verbatim}
->>>>>>> 63a090b9623fbd3789e240fb9ecbeedcf5dea43d
+\caption{Stochastic if operator}
+ \label{fig:poisson}
+\end{figure}
+
+\begin{figure}[H]
+\begin{verbatim}
+var query = function (expression, predicate) {
+        var val = eval(expression); // or = expression() return [a,b,c], how to get a,b,c
+        if (predicate(val) === true) {
+            return val;
+        } else {
+            return query(expression, predicate);
+        }
+    }
+\end{verbatim}
+\caption{Implementation of query}
+ \label{fig:query}
+\end{figure}
+
+\begin{figure}[H]
+\begin{verbatim}
+   // Lexicalised sampling based query
+var lexQuery = function (lexicons, expression, predicate) {
+        var evaluatedLexicons = [];
+        for (var i = 0; i < lexicons.length; ++i) {
+            evaluatedLexicons[i] = lexicons[i]();
+        }
+        var val = expression.apply(this, evaluatedLexicons);
+        if (predicate.apply(this, val) === true) {
+            return val;
+        } else {
+            return lexQuery(lexicons, expression, predicate);
+        }
+    }
+\end{verbatim}
+\caption{Implementation of lexicalised query}
+ \label{fig:query}
+\end{figure}
+
+
+
+
+\subsection*{Simple Program Induction}
+Taking example from \cite{VIKASH's} thesis,
+
+
+\section*{RLChurch}
+RL churched is designed to be agnostic to the domain of the problem.
+
+\begin{figure}[H]
+\begin{verbatim}
+(define do-learning
+  (lambda (current-time state possible-actions state-queries)
+    (cond
+      (((list-ref state-queries 0) current-time state)
+       (let* ((current-model (select-model 1.0 state-queries))
+              (num-samples 3)
+              (depth 3)
+              (discount .7)
+              (best-action (sparse-sampling depth num-samples discount current-model state possible-actions state-queries)))
+         (begin
+           (display current-time)
+           (display "\n")
+           (display best-action)
+           ((do-learning (+ 1 current-time) state possible-actions state-queries)))))
+       (else
+        (display "Game over")))))
+        
+(display "starting world\n")
+(let ((size-x 10)
+      (size-y 10)
+      (start-pos-x 2)
+      (start-pos-y 2)
+      (state-queries (list can-continue? get-world-size get-agent-position))
+      (possible-actions  '(move-up move-down move-left move-right)))
+  (do-learning
+   0
+   (create-initial-state size-x size-y start-pos-x start-pos-y)
+   possible-actions
+   state-queries))
+\end{verbatim}
+\caption{Main algorithm of RL-Church}
+ \label{fig:query}
+\end{figure}
+
 
 \bibliographystyle{siam}
 \bibliography{induct}

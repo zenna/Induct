@@ -6,6 +6,7 @@
 ; possible-actions is a list of functions which can be performed
 
 (load "domain.scm")
+(load "helpers.scm")
 (load "sparsesampling.scm")
 
 ; Select a model
@@ -25,20 +26,23 @@
 ; 
 (define do-learning
   (lambda (current-time state possible-actions state-queries)
-    (let* ((current-model (select-model 1.0 state-queries))
-           (num-samples 3)
-           (best-action (sparse-sampling depth num-samples discount model state possible-actions)))
-      (begin
-        (display current-time)
-        (display "\n")       
-    ;(best-action (sparse-sampling current-model state))
-    ;(state-reward (execute-action best-action)))
-        (cond
-          (((list-ref state-queries 0) current-time state)
-           ((do-learning (+ 1 current-time) state possible-actions state-queries)))
-          (else
-           (display "condition failed")))))))
-  
+    (cond
+      (((list-ref state-queries 0) current-time state)
+       (let* ((current-model (select-model 1.0 state-queries))
+              (num-samples 3)
+              (depth 3)
+              (discount .7)
+              (best-action (sparse-sampling depth num-samples discount current-model state possible-actions state-queries)))
+         (begin
+           (display current-time)
+           (display "\n")
+           (display best-action)
+           ((do-learning (+ 1 current-time) state possible-actions state-queries)))))
+       (else
+        (display "stop the game failed")))))
+
+;(best-action (sparse-sampling current-model state))
+;(state-reward (execute-action best-action)))
 
 (define execute-action
   (lambda (action)
@@ -48,12 +52,15 @@
 (display "starting world\n")
 (let ((size-x 10)
       (size-y 10)
-      (start-pos-x 0)
-      (start-pos-y 0)
+      (start-pos-x 2)
+      (start-pos-y 2)
       (state-queries (list can-continue? get-world-size get-agent-position))
-      (possible-actions (list '(move-up move-down move-left move-right))))
+      (possible-actions  '(move-up move-down move-left move-right)))
   (do-learning
    0
    (create-initial-state size-x size-y start-pos-x start-pos-y)
    possible-actions
    state-queries))
+
+
+
