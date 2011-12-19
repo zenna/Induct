@@ -431,7 +431,7 @@ var inductProgram = function() {
 \section*{Implementation details of RL-Church}
 RL churched is designed to be agnostic to the domain of the problem.
 The main algorithm, demonstrated as Church code in \ref{fig:mainalgo} takes as input a state, a list of possible actions, and \verb+state-queries+ list of possible queries to that state.
-Our important detail is the layer of abstraction afforded with the use of \verb+state-queries+.
+One important detail is the layer of abstraction afforded with the use of \verb+state-queries+.
 Although all observable state structure is contained within the \verb+state+ structure, all probing of the world must operate through the functions within \verb+state-queries+.
 This allows us to modify our representation of the world, without having to modify our main learning algorithms.
 It is also this set of functions, which are used in program induction to interrogate the state and learn regularities.
