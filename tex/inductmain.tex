@@ -81,7 +81,6 @@
 \usepackage[english]{babel}
 
 
-
 %% Math packages
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -121,9 +120,34 @@ Probabilistic program induction, model-based reinforcement learning, Church
 
 \section{Introduction}
 Reinforcement learning (RL) is a successful field of machine learning that has enjoyed much practical application, and is often the method of choice when acting in unknown or partially-unknown environments.
+
 However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. Consider the finite-state automaton in Figure 1.
 We made this agent with church and he learned everything.
 Well done, agent.
+
+However, there are simple examples of problems that humans solve effortlessly but pose challenges for standard RL algorithms. 
+Consider the finite-state automaton in Figure 1 (drawn from \cite{Dearden98-bayesianq-learning}).\begin{figure}
+\includegraphics[scale=.7]{chain}
+\caption{The chain problem; with probability .2, each action \emph{a} or \emph{b} results in a transition to the starting state 1. State 5 gives much greater reward than state 1, but standard RL algorithms fail to discover it.}
+\end{figure}
+The task is difficult because before the agent reaches the fifth stage, all of the evidence received suggests that the best strategy is to remain at the first state.
+Yet it seems clear that the potential rewards are sufficient to warrant visiting each state.
+This is an example of the \emph{exploration-exploitation tradeoff}: to maximize final reward, when should one decide to quit roaming and settle down?\\
+
+Recent work has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
+
+What could account for such dramatic differences?
+Humans seem to perform very well on problems with clear structure, possessing a strong inductive bias towards simplicity.
+Conversely, human performance is very poor in general RL environments. 
+\\
+
+To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
+Church is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
+Since its release, there has been steadily increasing interest in Bayesian program induction using Church.
+Most of this work uses a program length prior to learn concise models from data.
+This framework seems well suited to the problem at hand; the length prior prefers structured models that abstract over states and actions.
+\\
+Both probabilistic programming and Bayesian RL face significant computational difficulties. B
 
 \subsection*{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
@@ -155,6 +179,6 @@ var genExp = function() {
 \end{verbatim}
 
 \bibliographystyle{siam}
-\bibliography{library}
+\bibliography{induct}
 
 \end{document}
