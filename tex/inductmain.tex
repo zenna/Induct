@@ -90,7 +90,6 @@
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage{listings}
 
 \newcommand{\mycomment}[1]{{\color{blue} #1}}
 
@@ -173,7 +172,8 @@ Reinforcement learning (RL) is a formalization of the problem of learning to beh
 
 The classical theory of RL typically solves the problem by estimating $(R,T,A)$ and using techniques from the theory of MDPs (see below). This effectively disregards the exploration aspect of the tradeoff mentioned above . Other techniques try to estimate and incorporate the \emph{value of perfect information} and other heuristics to encourage exploration.
 \subsection*{Markov Decision Processes}
-Markov Decision Processes (MDPs) are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act.  
+Markov Decision Processes (MDPs) are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. 
+
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
 JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
@@ -182,27 +182,97 @@ It also offers many of the features associated with more commonly used imperativ
 
 Competition between browser vendors has in recent years taken place on the performance front, leading to a tremendous increase in the speed of JavaScript implementations, which now routinely outperform other interpreted languages in benchmark tests.
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
-In JIT compilers
+This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
-This combination of language and implementation properties make JavaScript particularly attractive for this kind of domain
+\subsection*{•}
+Stochastic JavaScript implements three properties of church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+query+.
 
-Due to JIT and other run-time optimisations, anecdotal evidence has even demonstrated JavaScript outperforming natively compiled code for certain classes of task.
-Program induction
+Code figure\ref{fig:query} demonstrates a simple implementation of query.
+The function calls itself recursively until the predicate returns true.
+The function \verb+lexQuery+ implements a lexicalised version of query, which for purposes of convenience allows the construction of a world by specifying a object of lexicons describing the world.
 
 
-
-\lstset{language=C++}
+\begin{figure}[H]
 \begin{verbatim}
-var genExp = function() {
-	if (flip(0.4)) {
-		return [flip(0.5) ? ["add",2]:["minus",2]].concat(genExp(),genExp());
+    // Knuth method
+var poissionRnd = function (lambda) {
+        var L = Math.exp(-lambda);
+        var k = 0;
+        var p = 1;
+        do {
+            k = k + 1;
+            p = p * Math.random();
+        }
+        while (p > L);
+        return k - 1;
+    }
+\end{verbatim}
+\caption{Knuth method of elementary random primitive for poission distribution}
+ \label{fig:poisson}
+\end{figure}
+
+\begin{figure}[H]
+\begin{verbatim}
+// Stochastic if operator 
+var sIf = function(noiseLevel, predicate, consequent, alternate) {		
+	noisyPredicate = flip(noiseLevel) ? predicate : !predicate;
+	if (noisyPredicate) {
+		return consequent ;
 	}
 	else {
-		return [[1 + sampleInteger(10),-1]];
+		return alternate;
 	}
 }
 \end{verbatim}
->>>>>>> 63a090b9623fbd3789e240fb9ecbeedcf5dea43d
+\caption{Stochastic if operator}
+ \label{fig:poisson}
+\end{figure}
+
+\begin{figure}[H]
+\begin{verbatim}
+var query = function (expression, predicate) {
+        var val = eval(expression); // or = expression() return [a,b,c], how to get a,b,c
+        if (predicate(val) === true) {
+            return val;
+        } else {
+            return query(expression, predicate);
+        }
+    }
+\end{verbatim}
+\caption{Implementation of query}
+ \label{fig:query}
+\end{figure}
+
+\begin{figure}[H]
+\begin{verbatim}
+   // Lexicalised sampling based query
+var lexQuery = function (lexicons, expression, predicate) {
+        var evaluatedLexicons = [];
+        for (var i = 0; i < lexicons.length; ++i) {
+            evaluatedLexicons[i] = lexicons[i]();
+        }
+        var val = expression.apply(this, evaluatedLexicons);
+        if (predicate.apply(this, val) === true) {
+            return val;
+        } else {
+            return lexQuery(lexicons, expression, predicate);
+        }
+    }
+\end{verbatim}
+\caption{Implementation of lexicalised query}
+ \label{fig:query}
+\end{figure}
+
+
+
+
+\subsection*{Simple Program Induction}
+Taking example from \cite{VIKASH's} thesis,
+
+
+\section*{RLChurch}
+RL churched is designed to be agnostic to the domain of the problem.
+
 
 \bibliographystyle{siam}
 \bibliography{induct}
