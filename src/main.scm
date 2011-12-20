@@ -32,14 +32,20 @@
               (num-samples 3)
               (depth 3)
               (discount .7)
-              (best-action (sparse-sampling depth num-samples discount current-model state possible-actions state-queries)))
+              (best-action (sparse-sampling
+                            depth num-samples
+                            discount current-model
+                            state possible-actions
+                            state-queries)))
          (begin
            (display current-time)
            (display "\n")
            (display best-action)
-           ((do-learning (+ 1 current-time) state possible-actions state-queries)))))
+           ((do-learning (+ 1 current-time) state
+                         possible-actions
+                         state-queries)))))
        (else
-        (display "stop the game failed")))))
+        (display "Game over")))))
 
 ;(best-action (sparse-sampling current-model state))
 ;(state-reward (execute-action best-action)))

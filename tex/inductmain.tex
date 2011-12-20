@@ -294,7 +294,8 @@ var poissionRnd = function (lambda) {
 
 \lstset{language=C}
 \begin{lstlisting}[caption={Stochastic If Operator},label=sif]
-vvar sIf = function(noiseLevel, predicate, consequent, alternate) {
+vvar sIf = function(noiseLevel, predicate,
+                             consequent, alternate) {
     noisyPredicate = flip(noiseLevel) ? predicate: !predicate;
     if (noisyPredicate) {
         return consequent;
@@ -397,6 +398,33 @@ Our important detail is the layer of abstraction afforded with the use of \verb+
 Although all observable state structure is contained within the \verb+state+ structure, all probing of the world must operate through the functions within \verb+state-queries+.
 This allows us to modify our representation of the world, without having to modify our main learning algorithms.
 It is also this set of functions, which are used in program induction to interrogate the state and learn regularities.
+
+\begin{lstlisting}[caption={Main RL-Church Algorithm},label=rlmain]
+(define do-learning
+  (lambda (current-time state possible-actions state-queries)
+    (cond
+      (((list-ref state-queries 0) current-time state)
+       (let* ((current-model (select-model 1.0 state-queries))
+              (num-samples 3)
+              (depth 3)
+              (discount .7)
+              (best-action (sparse-sampling
+                            depth num-samples
+                            discount current-model
+                            state possible-actions
+                            state-queries)))
+         (begin
+           (display current-time)
+           (display "\n")
+           (display best-action)
+           ((do-learning (+ 1 current-time) state
+                         possible-actions
+                         state-queries)))))
+       (else
+        (display "Game over")))))
+\end{lstlisting}
+
+The algorithm is executed by creating an initial state, and suitable list \verb+state-queries+.
 
 \section{Conclusion}
 We have presented a proposal for a model-based reinforcement learning algorithm that employs probabilistic program induction to represent and induce flexible generative models.
