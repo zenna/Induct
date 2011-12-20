@@ -174,6 +174,71 @@ Markov Decision Processes (MDPs) \citep{puterman} are a subset of RL problems; t
 Sparse sampling \citep{kearns} is a method for choosing actions to maximize rewards in MDPs for which the learning agent has a generative model of the world. 
 A \emph{generative model} is a probability distribution $p: S\times A \to S\times \mathbb{R}$ that, given a state and action, returns a new state and a reward. 
 Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use standard methods to solve it. 
+The following listing shows our implementation of sparse sampling in Church.
+
+\lstset{language=Lisp}
+\begin{lstlisting}[caption={Sparse Sampling},label=sparse]
+; Kearns et al. Sparse sampling algorihtm
+(define sparse-sampling
+  (lambda (depth num-samples discount model state 
+                 possible-actions state-queries)
+    (let
+        ((q-star (estimate-q depth num-samples discount
+                             model state possible-actions
+                             state-queries)))
+      (list-ref possible-actions (argmax (lambda (x) x) q-star)))))
+
+
+; Estimate value
+(define estimate-v
+  (lambda (depth num-samples discount model state
+                 possible-actions state-queries)
+    (let 
+        ((q-star (estimate-q depth num-samples discount
+                             model state possible-actions
+                             state-queries)))
+      (max-in-list q-star))))
+
+; For each action in possible actions generate C samples
+; And compute the reward until max depth
+(define estimate-q
+  (lambda (depth num-samples discount model state
+                 possible-actions state-queries)
+    (cond ((zero? depth)
+           (list 0))
+          (else
+           (map (lambda (action)
+                  (/ (sum-rewards num-samples
+                                  num-samples depth
+                                  discount model
+                                  state action
+                                  possible-actions
+                                  state-queries)
+                     num-samples))
+                possible-actions)))))
+
+; Recursive function to applied to evevery action
+(define sum-rewards
+  (lambda (sample-num num-samples depth
+                      discount model state action
+                      possible-actions state-queries)
+    (if (zero? sample-num)
+        0
+        (let ((state-reward (model state action state-queries)))
+          (+
+           (cdr state-reward)
+           (* discount (estimate-v (- depth 1)
+                                   num-samples
+                                   discount
+                                   model state
+                                   possible-actions
+                                   state-queries))
+           (sum-rewards (- sample-num 1) num-samples
+                        depth discount
+                        model state action
+                        possible-actions state-queries))))))
+\end{lstlisting}
+
 \subsection*{Probabilistic Program Induction}
 Probabilistic program induction techniques attempt to learn programs from data. 
 We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
@@ -204,6 +269,41 @@ It also offers many of the features associated with more commonly used imperativ
 Competition between browser vendors has in recent years taken place on the performance front, leading to a tremendous increase in the speed of JavaScript implementations, which now routinely outperform other interpreted languages in benchmark tests.
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation \citep{Aycock03}.
 This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
+
+\subsection*{Implementation}
+Stochastic JavaScript implements three properties of Church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+QUERY+.
+
+Listing \ref{fig:poissonRnd} demonstrates the implementation of an Elementary Random Primitive of a discrete Poisson distribution and is equivalent to the \verb+(poisson lambda)+ function found in Church.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={ERP of Poisson Distribution},label=poisson]
+var poissionRnd = function (lambda) {
+        var L = Math.exp(-lambda);
+        var k = 0;
+        var p = 1;
+        do {
+            k = k + 1;
+            p = p * Math.random();
+        }
+        while (p > L);
+        return k - 1;
+    }
+\end{lstlisting}
+
+\ref{fig:sif} is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={Stochastic If Operator},label=sif]
+vvar sIf = function(noiseLevel, predicate,
+                             consequent, alternate) {
+    noisyPredicate = flip(noiseLevel) ? predicate: !predicate;
+    if (noisyPredicate) {
+        return consequent;
+    } else {
+        return alternate;
+    }
+}
+\end{lstlisting}
 
 \subsection*{Conditional Inference}
 To support conditional inference Church generalises evaluation to \textit{conditional simulation} \citep{church} of any generative process, organising computation around a procedure \verb+(QUERY <expression> <environment> <predicate>)+.
@@ -291,35 +391,6 @@ var poissionRnd = function(database, logLikelihood, lambda) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption={Stochastic If Operator},label=sif]
-var poissionRnd = function(database, logLikelihood, lambda) {
-// Stochastic if operator 
-var sIf = function(noiseLevel, predicate, consequent, alternate) {
-    noisyPredicate = flip(noiseLevel) ? predicate: !predicate;
-    if (noisyPredicate) {
-        return consequent;
-    } else {
-        return alternate;
-    }
-}
-\end{lstlisting}
-
-
-\begin{figure}[H]
-\begin{verbatim}
-var query = function (expression, predicate) {
-        var val = eval(expression); // or = expression() return [a,b,c], how to get a,b,c
-        if (predicate(val) === true) {
-            return val;
-        } else {
-            return query(expression, predicate);
-        }
-    }
-\end{verbatim}
-\caption{Implementation of query}
- \label{fig:query}
-\end{figure}
-
 \section*{Implementation details of RL-Church}
 RL-Church is designed to be agnostic to the domain of the problem.
 The main algorithm, demonstrated as Church code in \ref{fig:mainalgo} takes as input a state, a list of possible actions, and \verb+state-queries+ list of possible queries to that state.
@@ -328,8 +399,7 @@ Although all observable state structure is contained within the \verb+state+ str
 This allows us to modify our representation of the world, without having to modify our main learning algorithms.
 It is also this set of functions, which are used in program induction to interrogate the state and learn regularities.
 
-\begin{figure}[H]
-\begin{verbatim}
+\begin{lstlisting}[caption={Main RL-Church Algorithm},label=rlmain]
 (define do-learning
   (lambda (current-time state possible-actions state-queries)
     (cond
@@ -338,75 +408,23 @@ It is also this set of functions, which are used in program induction to interro
               (num-samples 3)
               (depth 3)
               (discount .7)
-              (best-action (sparse-sampling depth num-samples discount current-model state possible-actions state-queries)))
+              (best-action (sparse-sampling
+                            depth num-samples
+                            discount current-model
+                            state possible-actions
+                            state-queries)))
          (begin
            (display current-time)
            (display "\n")
            (display best-action)
-           ((do-learning (+ 1 current-time) state possible-actions state-queries)))))
+           ((do-learning (+ 1 current-time) state
+                         possible-actions
+                         state-queries)))))
        (else
         (display "Game over")))))
-        
-(display "starting world\n")
-(let ((size-x 10)
-      (size-y 10)
-      (start-pos-x 2)
-      (start-pos-y 2)
-      (state-queries (list can-continue? get-world-size get-agent-position))
-      (possible-actions  '(move-up move-down move-left move-right)))
-  (do-learning
-   0
-   (create-initial-state size-x size-y start-pos-x start-pos-y)
-   possible-actions
-   state-queries))
-\end{verbatim}
-\caption{Main algorithm of RL-Church}
- \label{fig:mainalgo}
-\end{figure}
+\end{lstlisting}
 
-\ref{fig:sparsesample}
-
-\begin{figure}[H]
-\begin{verbatim}
-; Kearns et al Sparse sampling algorihtm
-(define sparse-sampling
-  (lambda (depth num-samples discount model state possible-actions state-queries)
-    (let
-        ((q-star (estimate-q depth num-samples discount model state possible-actions state-queries)))
-      (list-ref possible-actions (argmax (lambda (x) x) q-star)))))
-
-; Estimate value
-(define estimate-v
-  (lambda (depth num-samples discount model state possible-actions state-queries)
-    (let 
-        ((q-star (estimate-q depth num-samples discount model state possible-actions state-queries)))
-      (max-in-list q-star))))
-
-; For each action in possible actions generate C samples
-(define estimate-q
-  (lambda (depth num-samples discount model state possible-actions state-queries)
-    (cond ((zero? depth)
-           (list 0))
-          (else
-           (map (lambda (action)
-                  (/ (sum-rewards num-samples num-samples depth discount model state action possible-actions state-queries)
-                     num-samples))
-                possible-actions)))))
-
-; Recursive function to 
-(define sum-rewards
-  (lambda (sample-num num-samples depth discount model state action possible-actions state-queries)
-    (if (zero? sample-num)
-        0
-        (let ((state-reward (model state action state-queries)))
-          (+
-           (cdr state-reward)
-           (* discount (estimate-v (- depth 1) num-samples discount model state possible-actions state-queries))
-           (sum-rewards (- sample-num 1) num-samples depth discount model state action possible-actions state-queries))))))
-\end{verbatim}
-\caption{Main algorithms for sparse sampling}
- \label{fig:sparsesample}
-\end{figure}
+The algorithm is executed by creating an initial state, and suitable list \verb+state-queries+.
 
 \section{Conclusion}
 We have presented a proposal for a model-based reinforcement learning algorithm that employs probabilistic program induction to represent and induce flexible generative models.
