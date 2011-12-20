@@ -81,7 +81,7 @@
 \usepackage[english]{babel}
 
 %% bibtex
-\usepackage[authoryear]{natbib}
+\usepackage[comma,authoryear]{natbib}
 %% Math packages
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -135,7 +135,7 @@ Consider the finite-state automaton in Figure 1 (drawn from \citet{dearden}).\be
 \end{figure}
 The task is difficult because before the agent reaches the fifth stage, all of the evidence received suggests that the best strategy is to remain at the first state.
 Yet it seems clear that the potential rewards are sufficient to warrant visiting each state.
-This is an example of the \emph{exploration-exploitation tradeoff}\citep{wolpert}: to maximize final reward, when should one decide to quit roaming and settle down?
+This is an example of the \emph{exploration-exploitation tradeoff} \citep{wolpert}: to maximize final reward, when should one decide to quit roaming and settle down?
 
 Recent work \citep{shawn} has shown that humans perform very well on the chain problem, finding the best state hundreds or thousands of times faster than most RL algorithms.
 
@@ -145,14 +145,14 @@ Conversely, human performance is very poor in arbitrarily general RL environment
 
 To capture this apparent feature of human learning, we used techniques from Bayesian RL and probabilistic program induction to create a principled, (semi-) tractable method for learning to act in unknown environments. 
 Church \citep{church} is a probabilistic programming language that allows for flexible, compositional representation of generative models. 
-Since its release, there has been steadily increasing interest in Bayesian program induction using Church\citep{hwang}.
+Since its release, there has been steadily increasing interest in Bayesian program induction using Church \citep{hwang}.
 This work uses a program length prior to learn concise models from data.
 This framework seems well suited to the problem at hand; the length prior prefers structured models that abstract over states and actions, without specifying their precise form.
 
 Both probabilistic programming and Bayesian RL pose significant computational difficulties. Bayesian RL requires that one maintain a posterior distribution over possible world models, which we represent using Church programs. 
 Exact action selection in Bayesian RL requires exact planning, which is impossible for infinite horizon problems and intractable for finite horizon problems \citep{puterman}.
 We use sparse sampling for action selection, which maintains our Bayesian approach while making planning tractable \citep{kearns}.
-Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable\citep{vikash}. 
+Finally, probabilistic program induction is perhaps the most difficult computational task that we face; calculating the posterior probability of programs is intractable \citep{vikash}. 
 We use two strategies to enable computation.
 Rather than attempt to model the posterior probability directly, we draw (approximate) samples from the posterior distribution; this is a ubiquitous strategy in machine learning and computational statistics \citep{mackay}. 
 To find high-probability programs, we use heuristics that favor abstraction (drawn from \citet{hwang}).
@@ -165,7 +165,7 @@ In Section 5, we describe Stochastic Javascript, an extension of the Javascript 
 To conclude, we discuss possible applications and future research directions.
 \section{Background}
 \subsection*{Reinforcement Learning}
-Reinforcement learning (RL) is a formalization of the problem of learning to behave optimally in unknown environments\citep{suttonbarto}. An environment is a tuple $(S,A,T,R)$, where $S$ is a set of \emph{states}, $A$ is a set of (possibly state-dependent) \emph{actions}, $T: S\times A \to S$ is a stochastic state \emph{transition function}, and $R: S\times A -> \mathbb{R}$ is the \emph{reward} of taking action $a$ in state $s$.
+Reinforcement learning (RL) is a formalization of the problem of learning to behave optimally in unknown environments \citep{suttonbarto}. An environment is a tuple $(S,A,T,R)$, where $S$ is a set of \emph{states}, $A$ is a set of (possibly state-dependent) \emph{actions}, $T: S\times A \to S$ is a stochastic state \emph{transition function}, and $R: S\times A -> \mathbb{R}$ is the \emph{reward} of taking action $a$ in state $s$.
 
 The classical theory of RL typically solves the problem by estimating $(R,T,A)$ and using techniques from the theory of MDPs (see below). This effectively disregards the exploration aspect of the tradeoff mentioned above . Other techniques try to estimate and incorporate the \emph{value of perfect information} and other heuristics to encourage exploration.
 \subsection*{Markov Decision Processes}
@@ -244,7 +244,7 @@ Probabilistic program induction techniques attempt to learn programs from data.
 We shall focus on \emph{Bayesian} program induction, which assumes a prior probability distribution $p(M)$ over programs. 
 Using Bayes' theorem, $p(M|D)\propto p(D|M)p(M)$, these techniques estimate the posterior probability distribution over programs \citep{hwang}.
 \subsection*{Church}
-Church \citep{church} is an extension of the programming language Scheme to allow stochastic functions.
+Church \citep{church} is an extension of the programming language Scheme \citep{steele-sussman78} to allow stochastic functions.
 It allows flexible specification of generative models (it can express any computable probability distribution), and supports general-purpose probabilistic inference.
 A flurry of recent work (see the Church Wiki) has focused on probabilistic program induction using Church.
 
@@ -262,12 +262,12 @@ To facilitate such exploration, we have developed several tools for probabilisti
 
 \section{Stochastic Javascript}
 To meet the resource requirements of both reinforcement learning and program induction we developed a stochastic extension of the JavaScript programming language.
-JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax.
+JavaScript is a dynamic and weakly typed multi-paradigm language, with C-like syntax \citep{javascript}.
 In spite of its name, it bears little semantic resemblance to Java and instead derives many of its ideas from Scheme, with support for first class functions, closures, lambda expressions and an $eval$ procedure to evaluate dynamically generated code.
 It also offers many of the features associated with more commonly used imperative languages, such as a prototypical object model, the modification of state, and the ability to introduce side-effects in functions.
 
 Competition between browser vendors has in recent years taken place on the performance front, leading to a tremendous increase in the speed of JavaScript implementations, which now routinely outperform other interpreted languages in benchmark tests.
-A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
+A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation \citep{Aycock03}.
 This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
 \subsection*{Implementation}
@@ -305,7 +305,7 @@ vvar sIf = function(noiseLevel, predicate, consequent, alternate) {
 \end{lstlisting}
 
 \subsection*{Conditional Inference}
-To support conditional inference Church generalises evaluation to \textit{conditional simulation} \cite{VIKASH} of any generative process, organising computation around a procedure \verb+(QUERY <expression> <environment> <predicate>)+.
+To support conditional inference Church generalises evaluation to \textit{conditional simulation} \citep{church} of any generative process, organising computation around a procedure \verb+(QUERY <expression> <environment> <predicate>)+.
 \verb+QUERY+ simulates from the distribution of values of a given expression given that the predicate is true.
 As in Church, we first provide an implementation of \verb+QUERY+  in \cite{querydad}, which takes as arguments an expression and predicate and returns a sample from the conditional distribution on values induced by the expression.
 We use here rejection sampling, which equates to recursively simulating the underlying process and accepting only if the predicate evaluates as true.
@@ -391,7 +391,7 @@ var poissionRnd = function(database, logLikelihood, lambda) {
 \end{lstlisting}
 
 \section*{Implementation details of RL-Church}
-RL churched is designed to be agnostic to the domain of the problem.
+RL-Church is designed to be agnostic to the domain of the problem.
 The main algorithm, demonstrated as Church code in \ref{fig:mainalgo} takes as input a state, a list of possible actions, and \verb+state-queries+ list of possible queries to that state.
 Our important detail is the layer of abstraction afforded with the use of \verb+state-queries+.
 Although all observable state structure is contained within the \verb+state+ structure, all probing of the world must operate through the functions within \verb+state-queries+.
