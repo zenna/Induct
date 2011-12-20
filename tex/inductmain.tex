@@ -169,7 +169,7 @@ Reinforcement learning (RL) is a formalization of the problem of learning to beh
 
 The classical theory of RL typically solves the problem by estimating $(R,T,A)$ and using techniques from the theory of MDPs (see below). This effectively disregards the exploration aspect of the tradeoff mentioned above . Other techniques try to estimate and incorporate the \emph{value of perfect information} and other heuristics to encourage exploration.
 \subsection*{Markov Decision Processes}
-Markov Decision Processes (MDPs) \citep{puterman} are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. For small MDPs, this is straightforward; algorithms for exact calculation have been known since the 1950s. For large MDPs,  approximate techniques are required. Sparse sampling is one such method.\newpage
+Markov Decision Processes (MDPs) \citep{puterman} are a subset of RL problems; they assume that the state, action, transition function, and reward functions are known. Thus the problem reduces to calculating the optimal way to act. For small MDPs, this is straightforward; algorithms for exact calculation have been known since the 1950s. For large MDPs,  approximate techniques are required. Sparse sampling is one such method.
 \subsection*{Sparse Sampling}
 Sparse sampling \citep{kearns} is a method for choosing actions to maximize rewards in MDPs for which the learning agent has a generative model of the world. 
 A \emph{generative model} is a probability distribution $p: S\times A \to S\times \mathbb{R}$ that, given a state and action, returns a new state and a reward. 
@@ -273,7 +273,7 @@ This combination of language and implementation properties make JavaScript parti
 \subsection*{Implementation}
 Stochastic JavaScript implements three properties of Church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+QUERY+.
 
-The following listing  demonstrates the implementation of an Elementary Random Primitive of a discrete Poisson distribution and is equivalent to the \verb+(poisson lambda)+ function found in Church.
+Listing 2 demonstrates the implementation of an Elementary Random Primitive of a discrete Poisson distribution and is equivalent to the \verb+(poisson lambda)+ function found in Church.
 
 \lstset{language=C}
 \begin{lstlisting}[caption={ERP of Poisson Distribution},label=poisson]
@@ -290,7 +290,7 @@ var poissionRnd = function (lambda) {
     }
 \end{lstlisting}
 
-\ref{fig:sif} is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
+Listing 3 is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
 
 \lstset{language=C}
 \begin{lstlisting}[caption={Stochastic If Operator},label=sif]
@@ -308,10 +308,10 @@ vvar sIf = function(noiseLevel, predicate,
 \subsection*{Conditional Inference}
 To support conditional inference Church generalises evaluation to \textit{conditional simulation} \citep{church} of any generative process, organising computation around a procedure \verb+(QUERY <expression> <environment> <predicate>)+.
 \verb+QUERY+ simulates from the distribution of values of a given expression given that the predicate is true.
-As in Church, we first provide an implementation of \verb+QUERY+  in \cite{querydad}, which takes as arguments an expression and predicate and returns a sample from the conditional distribution on values induced by the expression.
+As in Church, we first provide an implementation of \verb+QUERY+  in Listing 4, which takes as arguments an expression and predicate and returns a sample from the conditional distribution on values induced by the expression.
 We use here rejection sampling, which equates to recursively simulating the underlying process and accepting only if the predicate evaluates as true.
-Listing \ref{fig:m}  extends this to a lexicalised version of \verb+query+, which for purposes of convenience provides a method to name random variables, shared across all evaluations; in effect constructing the elements of a random world.
-One further difference between our implementation of \verb+query+ and \verb+lex-query+ is the representation of an expression as a function instead of as a string as required for \verb+eval+.
+Listing 5 extends this to a lexicalised version of \verb+query+, which for purposes of convenience provides a method to name random variables, shared across all evaluations; in effect constructing the elements of a random world.
+One further difference between our implementation of \verb+query()+ and \verb+lex-query()+ is the representation of an expression as a function instead of as a string as required for \verb+eval()+.
 Functions can be dynamically created with \verb+new Function("code as string")+, which parses the code stored in a string into a function object, which can then be called.
 These functions cannot affect local variables because the code runs in a separate scope and hence, the JIT compiler is able to make assurances about the function and infer better optimisations.
 
@@ -343,18 +343,18 @@ var lexQuery = function (lexicons, expression, predicate) {
     }
 \end{lstlisting}
 
-Rejection sampling is expected to intractable in general, so here we outline an approximation of query following the method outlined in (WINGATE LIGHTWEIGHT PAPER).
+Rejection sampling is expected to intractable in general, so here we outline an approximation of query following the method outlined in \citep{lightweight}.
 The general idea is to give each ERP of a probabilistic program a unique name representing its position in the stack-trace, and then converting these stochastic functions into deterministic ones, effectively forcing a particular trace through the program.
 We can then implement a Markov Chain through the space of program traces by modifying the values of these ERPs according to the Metropolis Hastings algorithm.
 The inherent statefulness of this procedure is ill suited to a functional language, but as stated previously JavaScript permits the modificatio of global state.
-To realise this we maintain a database to which ERP sampled values are saved to, or retrieved from in a manner outlined in detail in (WINGATE), and compute the likelihood of the all random choices made during a program ER $x$ by 
+To realise this we maintain a database to which ERP sampled values are saved to, or retrieved from in a manner outlined in detail in \citep{lightweight}, and compute the likelihood of the all random choices made during a program ER $x$ by 
 
 \begin{equation}
 p(x) = \prod_{k=1}^K p_{t_k}(x_k \vert \theta_{t_k},x_1,...,x{k-1})
 \end{equation}
 
 where $k$ is the $k^{th}$ encountered ERP and $\theta$ are parameters of the distribution.
-In order for each ERP to control the values of ERPs to be either sampled or retrieved from the database, we modify their (for example see (MODIFIED POISSON) to take in a $(database, logLikelihood$ pair as arguments in addition to any parameters.
+In order for each ERP to control the values of ERPs to be either sampled or retrieved from the database, we modify the code (for example see the following snippet) to take in a $(database, logLikelihood$ pair as arguments in addition to any parameters.
 Currently this modification has happened manually, but automatic code translation of ERPs is certainly feasible.
 
 \lstset{language=C}
@@ -393,7 +393,7 @@ var poissionRnd = function(database, logLikelihood, lambda) {
 
 \section*{Implementation details of RL-Church}
 RL-Church is designed to be agnostic to the domain of the problem.
-The main algorithm, demonstrated in the following code takes as input a state, a list of possible actions, and \verb+state-queries+ list of possible queries to that state.
+The main algorithm, demonstrated as Church code in Listing 7, takes as input a state, a list of possible actions, and \verb+state-queries+ list of possible queries to that state.
 Our important detail is the layer of abstraction afforded with the use of \verb+state-queries+.
 Although all observable state structure is contained within the \verb+state+ structure, all probing of the world must operate through the functions within \verb+state-queries+.
 This allows us to modify our representation of the world, without having to modify our main learning algorithms.
