@@ -6,7 +6,17 @@
         ((q-star (estimate-q depth num-samples discount
                              model state possible-actions
                              state-queries)))
-      (list-ref possible-actions (argmax (lambda (x) x) q-star)))))
+      (list-ref possible-actions (arg-max (lambda (x) x) q-star)))))
+
+;; Kearns et al. Sparse sampling algorihtm
+;(define sparse-sampling
+;  (lambda (depth num-samples discount model state 
+;                 possible-actions state-queries)
+;    (let
+;        ((q-star (estimate-q depth num-samples discount
+;                             model state possible-actions
+;                             state-queries)))
+;      q-star)))
 
 
 ; Estimate value
@@ -55,5 +65,5 @@
                                    state-queries))
            (sum-rewards (- sample-num 1) num-samples
                         depth discount
-                        model state action
+                        model (car state-reward) action
                         possible-actions state-queries))))))

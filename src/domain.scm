@@ -2,7 +2,7 @@
 ; Want to stop if world has stopped or after t-max timesteps
 (define can-continue?
   (lambda (current-time state)
-    (if (< current-time 10)
+    (if (< current-time 30)
         #t
         #f)))
 
@@ -19,7 +19,7 @@
 ; is the agent in an invalid position
 (define invalid-pos?
   (lambda (position world-size)
-    (and 
+    (or 
      (>= (car position) (car world-size))
      (>= (cdr position) (cdr world-size)))))
 
@@ -33,6 +33,17 @@
      (or
       (equal? (cdr position) (- (cdr world-size) 1))
       (equal? (cdr position) 0)))))
+
+; is the agent on the perimiter?
+(define mod-3?
+  (lambda (position world-size)
+    (or (zero? (remainder (car position) 3))
+        (zero? (remainder (car position) 4)))))
+
+(define update-state-position
+  (lambda (old-state position)
+    (list (list-ref old-state 0) (list-ref old-state 1)
+          (car position) (cdr position))))
 
 ; Model for wicked world
 (define test-model
@@ -53,11 +64,11 @@
                         (else
                          (cdr agent-position))))))
       (cond ((invalid-pos? agent-new-position world-size)
-             (cons '(KEEP CURRENT POSITION) 0.0))
+             (cons state 0.0))
             ((on-perimeter? agent-new-position world-size)
-             (cons '(CREATE STATE FROM NEW POSITION) 1.0))
+             (cons (update-state-position state agent-new-position) 1.0 ))
             (else
-             (cons '(NO REWARD BUT MOVE) 0.0))))))
+             (cons (update-state-position state agent-new-position) 0.0))))))
 
 ; Create an initial state
 (define create-initial-state
