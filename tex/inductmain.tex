@@ -243,42 +243,67 @@ var lexQuery = function (lexicons, expression, predicate) {
     }
 \end{lstlisting}
 
+Rejection sampling is expected to intractable in general, so here we outline an approximation of query following the method outlined in (WINGATE LIGHTWEIGHT PAPER).
+The general idea is to give each ERP of a probabilistic program a unique name representing its position in the stack-trace, and then converting these stochastic functions into deterministic ones, effectively forcing a particular trace through the program.
+We can then implement a Markov Chain through the space of program traces by modifying the values of these ERPs according to the Metropolis Hastings algorithm.
+The inherent statefulness of this procedure is ill suited to a functional language, but as stated previously JavaScript permits the modificatio of global state.
+To realise this we maintain a database to which ERP sampled values are saved to, or retrieved from in a manner outlined in detail in (WINGATE), and compute the likelihood of the all random choices made during a program ER $x$ by 
 
-\begin{figure}[H]
-\begin{verbatim}
-    // Knuth method
-var poissionRnd = function (lambda) {
-        var L = Math.exp(-lambda);
-        var k = 0;
-        var p = 1;
-        do {
-            k = k + 1;
-            p = p * Math.random();
+\begin{equation}
+p(x) = \prod_{k=1}^K p_{t_k}(x_k \vert \theta_{t_k},x_1,...,x{k-1})
+\end{equation}
+
+where $k$ is the $k^{th}$ encountered ERP and $\theta$ are parameters of the distribution.
+In order for each ERP to control the values of ERPs to be either sampled or retrieved from the database, we modify their (for example see (MODIFIED POISSON) to take in a $(database, logLikelihood$ pair as arguments in addition to any parameters.
+Currently this modification has happened manually, but automatic code translation of ERPs is certainly feasible.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={Modified Poission ERP for MCMC},label=modERP]
+var poissionRnd = function(database, logLikelihood, lambda) {
+    var currentParams = {
+        type: 'poissionRnd',
+        theta: arguments
+    };
+
+    var name = generateNameFromStackTrace();
+    if (name in database 
+            && currentParams.type == dbParams.type) {
+        dbParmas = database[name];
+        if (currentParams.theta == dbParams.theta) {
+            logLikelihood = logLikelihood +
+                                     dbParams.logLikelihood
+        } else {
+            var l = Math.log(computeLikelihood());
+            database.name.l = l;
+            logLikelihood = logLikelihood + l;
         }
-        while (p > L);
-        return k - 1;
-    }
-\end{verbatim}
-\caption{Knuth method of elementary random primitive for poission distribution}
- \label{fig:poisson}
-\end{figure}
+    } else {}
 
-\begin{figure}[H]
-\begin{verbatim}
-// Stochastic if operator 
-var sIf = function(noiseLevel, predicate, consequent, alternate) {		
-	noisyPredicate = flip(noiseLevel) ? predicate : !predicate;
-	if (noisyPredicate) {
-		return consequent ;
-	}
-	else {
-		return alternate;
-	}
+    var L = Math.exp( - lambda);
+    var k = 0;
+    var p = 1;
+    do {
+        k = k + 1;
+        p = p * Math.random();
+    }
+    while (p > L);
+    return k - 1;
 }
-\end{verbatim}
-\caption{Stochastic if operator}
- \label{fig:poisson}
-\end{figure}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Stochastic If Operator},label=sif]
+var poissionRnd = function(database, logLikelihood, lambda) {
+// Stochastic if operator 
+var sIf = function(noiseLevel, predicate, consequent, alternate) {
+    noisyPredicate = flip(noiseLevel) ? predicate: !predicate;
+    if (noisyPredicate) {
+        return consequent;
+    } else {
+        return alternate;
+    }
+}
+\end{lstlisting}
+
 
 \begin{figure}[H]
 \begin{verbatim}
@@ -294,27 +319,6 @@ var query = function (expression, predicate) {
 \caption{Implementation of query}
  \label{fig:query}
 \end{figure}
-
-\begin{figure}[H]
-\begin{verbatim}
-   // Lexicalised sampling based query
-var lexQuery = function (lexicons, expression, predicate) {
-        var evaluatedLexicons = [];
-        for (var i = 0; i < lexicons.length; ++i) {
-            evaluatedLexicons[i] = lexicons[i]();
-        }
-        var val = expression.apply(this, evaluatedLexicons);
-        if (predicate.apply(this, val) === true) {
-            return val;
-        } else {
-            return lexQuery(lexicons, expression, predicate);
-        }
-    }
-\end{verbatim}
-\caption{Implementation of lexicalised query}
- \label{fig:query}
-\end{figure}
-
 
 \section*{Implementation details of RL-Church}
 RL-Church is designed to be agnostic to the domain of the problem.
