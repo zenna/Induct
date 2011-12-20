@@ -270,6 +270,40 @@ Competition between browser vendors has in recent years taken place on the perfo
 A large contribution to this progress stems from the adoption of just-in-time compilation (JIT) techniques, which sits somewhere in between interpretation and static (ahead-of-time) compilation.
 This combination of language and implementation properties make JavaScript particularly attractive for this program induction, since inducted programs will be compiled to native code on the fly.
 
+\subsection*{Implementation}
+Stochastic JavaScript implements three properties of Church: elementary random primitives (ERPs), stochastic operators and implementations of \verb+QUERY+.
+
+Listing \ref{fig:poissonRnd} demonstrates the implementation of an Elementary Random Primitive of a discrete Poisson distribution and is equivalent to the \verb+(poisson lambda)+ function found in Church.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={ERP of Poisson Distribution},label=poisson]
+var poissionRnd = function (lambda) {
+        var L = Math.exp(-lambda);
+        var k = 0;
+        var p = 1;
+        do {
+            k = k + 1;
+            p = p * Math.random();
+        }
+        while (p > L);
+        return k - 1;
+    }
+\end{lstlisting}
+
+\ref{fig:sif} is a implementation of a stochastic \verb+if+ operator, which will take the wrong path with some probability, this may contribute to softening the space of possible programs.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={Stochastic If Operator},label=sif]
+vvar sIf = function(noiseLevel, predicate, consequent, alternate) {
+    noisyPredicate = flip(noiseLevel) ? predicate: !predicate;
+    if (noisyPredicate) {
+        return consequent;
+    } else {
+        return alternate;
+    }
+}
+\end{lstlisting}
+
 \subsection*{Conditional Inference}
 To support conditional inference Church generalises evaluation to \textit{conditional simulation} \cite{VIKASH} of any generative process, organising computation around a procedure \verb+(QUERY <expression> <environment> <predicate>)+.
 \verb+QUERY+ simulates from the distribution of values of a given expression given that the predicate is true.
