@@ -176,6 +176,11 @@ A \emph{generative model} is a probability distribution $p: S\times A \to S\time
 Sparse sampling techniques sample from this model to grow a state-action-reward tree to a specified depth, then transform this tree into an approximate MDP and use standard methods to solve it. 
 The following listing shows our implementation of sparse sampling in Church.
 
+\subsubsection*{Markov Chain Monte Carlo through simulation space}
+Naive sparse sampling is intractable.
+If we consider sparse sampling as defining a fully balanced tree of finite or infinite depth, we are interesting in exploring areas of that tree of most interest.
+
+
 \lstset{language=Lisp}
 \begin{lstlisting}[caption={Sparse Sampling},label=sparse]
 ; Kearns et al. Sparse sampling algorihtm
