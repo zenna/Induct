@@ -1,31 +1,26 @@
-// TODO:
-// Prevent using main
-// 2. Test on symoblic regression problem
-// 3. Implement lambarise, replaceNode, deleteNode,
-// 3. Implement into RL (i.e. sparse sampling)
-// 4. Implement local variables with let
-// 6. Implement timing constraints
-// 5. More complex typing system
-//
-// 1. Investigate guaranteed halting recursive schemes (e.g. primitive recursion, typed)
-// 2. Investigate giving partial credit to non halting programs (e.g. functional reactive programming)
-// 3. Make action sampling under modification
-// 4. Allow first class functions
-// 5. Allow generation of own actions
-// 6. L
-// This is a the program generator
 
-function Program(observedData) {
-	this.observedData = observedData;
-	this.length = 0;
+function Program(observedData, stateQueries) {
+    this.stateQueries = stateQueries;
+    this.observedData = observedData;
+    this.length = 0;
     this.functions = {
         'main' : {
             modifyable : true,
-            typeSig : [['number', 'number'], 'list'],
+            typeSig : [['state', 'state'], 'stateReward'],
             codeAsTree : {
-                main : [null, null]
+                returnNode : [{
+                    combineStateReward : [null, null]
+                }]
             },
             __dirty : true
+        },
+        'combineStateReward' : {
+            modifyable : false,
+            typeSig : [['state', 'number'], 'stateReward'],
+            codeAsFunction : function(state, reward) {
+                return [state, reward];
+            }
+
         },
         'plus' : {
             modifyable : false,
@@ -77,10 +72,45 @@ function Program(observedData) {
                 return [a, b];
             }
 
-        }
+        },
+        'increment' : {
+            modifyable : false,
+            typeSig : [['number'], 'number'],
+            codeAsFunction : function(a) {
+                return a + 1;
+            }
+
+        },
+        'decrement' : {
+            modifyable : false,
+            typeSig : [['number'], 'number'],
+            codeAsFunction : function(a) {
+                return a - 1;
+            }
+
+        },
     }
+
+    jQuery.extend(this.functions, stateQueries);
+
     this.codeAsString = "";
-    this.__dirty == true;
+    this.__dirty = true;
+
+    this.getAllNodes = function(funcForLocals) {
+        var allNodes = {};
+        var localVariables = this.getLocalVariables(funcForLocals);
+        for(var func in this.functions) {
+            if(!( func in allNodes) && func != funcForLocals) {
+                allNodes[func] = this.functions[func];
+            }
+        }
+        for(var func in localVariables) {
+            if(!( func in allNodes)) {
+                allNodes[func] = localVariables[func];
+            }
+        }
+        return allNodes;
+    }
 
     // Makes (locally to this object) unique function name e.g. f1231
     this.makeGuid = function() {
@@ -91,20 +121,48 @@ function Program(observedData) {
         return guid;
     }
 
-    // Todo actually compile
+
     this.compileAll = function() {
-        // if dirty
-        for(func in this.functions) {
-            this.compileFunction(this.functions[func]);
+        // If program has nulls in it, it is invalid
+        try {
+            if(this.__dirty === true) {
+                for(func in this.functions) {
+                    if(this.functions[func]['modifyable'] === true) {
+                        var compiledFunc = this.compileFunction(func);
+                    }
+                }
+            }
+            this.__dirty = false;
+            var functions = this.functions;
+            return function(state, action, stateQueries) {
+                return functions['main']['codeAsFunction'](functions, state, action);
+            }
+
+        } catch(er) {
+            if(er === "nullInTree") {
+                return function(state, action, stateQueries) {
+                    return [state, -1];
+                };
+
+            }
         }
     }
 
     // Convert tree or list expression into compiled code
     this.compileFunction = function(func) {
-        if(func['__dirty'] === true) {
-            func['codeAsString'] = this.processSymbols(func['codeAsTree']);
-            func['codeAsFunction'] = new Function(func['codeAsString']);
-            func['__dirty'] = false;
+        if(this.functions[func]['__dirty'] === true) {
+            this.functions[func]['codeAsString'] = this.processSymbols(this.functions[func]['codeAsTree']);
+            var localVariables = this.getLocalVariables(func);
+            var localVariablesAsList = ['functions'];
+            for(localFunc in localVariables) {
+                localVariablesAsList.push(localFunc);
+            }
+            this.functions[func]['codeAsFunction'] = new Function(localVariablesAsList, this.functions[func]['codeAsString']);
+            this.functions[func]['__dirty'] = false;
+            return this.functions[func]['codeAsFunction'];
+        } else {
+            console.log("not dirtty");
+            return this.functions[func]['codeAsFunction'];
         }
     }
 
@@ -114,7 +172,8 @@ function Program(observedData) {
             if(isNullOk === true) {
                 return false;
             } else {
-                throw "Null in tree, cannot build";
+                console.log("Null in tree");
+                // throw "nullInTree";
             }
         } else if( typeof symbol === "object") {
             return true;
@@ -133,10 +192,19 @@ function Program(observedData) {
             for(x in funcTree) {
                 symbol = x;
             }
-            functionAsString += symbol + "(";
+
+            if(symbol === "returnNode") {
+                functionAsString += "return (";
+            } else {
+                functionAsString += "functions." + symbol + ".codeAsFunction" + "(";
+                if(this.functions[symbol]['modifyable'] === true) {
+                    // Need to pass functions object to modifyable objects
+                    functionAsString += "functions,";
+                }
+            }
             var numArguments = funcTree[symbol].length;
             for(var i = 0; i < numArguments; ++i) {
-                functionAsString += processSymbols(funcTree[symbol][i]);
+                functionAsString += this.processSymbols(funcTree[symbol][i]);
                 if(i != numArguments - 1) {
                     functionAsString += ",";
                 }
@@ -144,12 +212,16 @@ function Program(observedData) {
             functionAsString += ")";
             return functionAsString;
         } else {
+        	// is action
+        	if (funcTree === "main_a1") {
+        		return "functions['main_a1'].codeAsFunction(main_a0)";
+        	}
             return funcTree;
         }
     }
 
 
-    this.findLocalVariables = function(func) {
+    this.getLocalVariables = function(func) {
         var localVariables = {};
         var typeSig = this.functions[func]['typeSig'][0];
         for(var i = 0; i < typeSig.length; ++i) {
@@ -161,8 +233,9 @@ function Program(observedData) {
     }
 
     // Recurse through funcTree building filtered list
-    this.treeFilter = function(funcTree, filterFunc) {
-        var filteredFuncs = [];
+    this.treeFilter = function(funcTree, filterFunc, position) {
+        // var filteredFuncs = [];
+        var filteredPositions = [];
         if(this.isSymbolFunction(funcTree, true)) {
 
             // Object has single proprety, get key
@@ -170,16 +243,18 @@ function Program(observedData) {
             for(x in funcTree) {
                 symbol = x;
             }
+            position = position.concat(symbol);
 
             if(filterFunc.apply(filterFunc, [funcTree, symbol])) {
-                filteredFuncs.push(funcTree);
+                // filteredFuncs.push(funcTree);
+                filteredPositions.push(position);
             }
 
             var numArguments = funcTree[symbol].length;
             for(var i = 0; i < numArguments; ++i) {
-                filteredFuncs = filteredFuncs.concat(this.treeFilter(funcTree[symbol][i], filterFunc));
+                filteredPositions = filteredPositions.concat(this.treeFilter(funcTree[symbol][i], filterFunc, position.concat(i)));
             }
-            return filteredFuncs;
+            return filteredPositions;
         } else {
             return [];
         }
@@ -216,8 +291,8 @@ function Program(observedData) {
 
     // Draw all the functions
     this.draw = function(index) {
-        var width = 400;
-        var height = 400;
+        var width = 300;
+        var height = 300;
         var graphs = [];
         var renderers = [];
         var layouters = [];
@@ -257,28 +332,28 @@ function Program(observedData) {
 }
 
 // Actions	------------------- this is bound to program object.
-var addBoundNode = function(child, parent, parentSymbol, argPos) {
-    var childSymbol;
-    // TOdo: more elegant
-    for(var x in child) {
-        childSymbol = x;
-    }
-    if(child[childSymbol]['typeSig'].length === 1) {
+var addBoundNode = function(program, child, parentFunc, parentPropertyTrace, availableSlotPos) {
+    var parentSlot = getNestedObjectFromPropertyStack(program.functions[parentFunc]['codeAsTree'], parentPropertyTrace);
+    var childObj = program.getAllNodes(parentFunc)[child];
+
+    if(childObj['typeSig'].length === 1) {
         // Am a variable
-        parent[parentSymbol][argPos] = childSymbol;
-    } else if(child[childSymbol]['typeSig'].length === 2) {
+        parentSlot[availableSlotPos] = child;
+    } else if(childObj['typeSig'].length === 2) {
         // Am a function
-        var numArgs = this.functions[childSymbol]['typeSig'][0].length;
+        var numArgs = childObj['typeSig'][0].length;
         var nullArgs = [];
         for(var i = 0; i < numArgs; ++i) {
             nullArgs.push(null);
         }
-        parent[parentSymbol][argPos] = {};
-        parent[parentSymbol][argPos][childSymbol] = nullArgs;
+        parentSlot[availableSlotPos] = {};
+        parentSlot[availableSlotPos][child] = nullArgs;
     } else {
         throw "typeSig length is wrong";
     }
-    this.length += 1;
+    program.length += 1;
+    program.__dirty = true;
+    program.functions[parentFunc].__dirty = true;
 }
 
 var replace = function(func) {
@@ -309,39 +384,32 @@ this.makeLambda = function(typeSig) {
 
 // ------------------------------------------------------------------
 
-var flip = function() {
-    return;
-}
-
-var randInteger = function(lowerBound, upperBound) {
-    return Math.floor(Math.random() * (upperBound - lowerBound)) + lowerBound;
-}
-
-// TODO - make this do as intended
-var getRandomElement = function(list, erp, erpParams) {
-    return list[randInteger(0, list.length)];
-}
-
 // Action sampler, returns function => [listOfArguments]
 var sampleProgramAction = function(program) {
-    var topLevelActions = [addBoundNode, addBoundNode, addBoundNode, addBoundNode, doNothing, makeLambda];
-    var actionType = getRandomElement(topLevelActions, flip, 0.1);
+    var topLevelActions = ['addBoundNode', 'addBoundNode', 'addBoundNode', 'addBoundNode', 'doNothing'];
+    var actionType = stGetRandomElement(topLevelActions);
 
-    if(actionType === makeLambda) {
+    if(actionType === 'makeLambda') {
         //TODO generate Typesig
         return [makeLambda, [[['number', 'list'], 'number']]];
     }
     // takes a node from function set, binds to bindTo node as argument
-    else if(actionType === addBoundNode) {
+    else if(actionType === 'addBoundNode') {
+        // Choose function we will modify
         var funcs = [];
-        for(func in program.functions) {
+        for(var func in program.functions) {
             if(program.functions[func]['modifyable'] === true) {
                 funcs.push(func);
             }
         }
-        var parentFunc = getRandomElement(funcs, flip);
+
+        var parentFunc = stGetRandomElement(funcs);
+                if (parentFunc === 'main') {
+        	var alphabrea;
+        }
         var codeAsTree = program.functions[parentFunc]['codeAsTree'];
-        // Recursively find all functions with empty slot (containing null)
+
+        // Recursively find all nodes within chosen function with empty slot ( null)
         var viableParents = program.treeFilter(codeAsTree, function(funcTree, symbol) {
             var numArguments = funcTree[symbol].length;
             var hasEmptySlot = false;
@@ -352,51 +420,46 @@ var sampleProgramAction = function(program) {
                 }
             }
             return hasEmptySlot;
-        });
+        }, []);
 
         if(viableParents.length === 0) {
             console.log("no empty slots");
-            return [doNothing, []];
+            return ['doNothing', []];
         }
-        var parent = getRandomElement(viableParents, flip);
+        var parentPropertyTrace = stGetRandomElement(viableParents);
+        var parentSlots = getNestedObjectFromPropertyStack(program.functions[parentFunc]['codeAsTree'], parentPropertyTrace);
+        var availableSlotPos = stGetRandomFilteredElementIndex(parentSlots, function(element) {
+            return element === null ? true : false
+        });
 
-        // Get parent symbol
-        // TODO: Fix:This will always select the first available slot of many
-        var parentSymbol;
-        var availableSlotPos;
-        for(x in parent) {
-            parentSymbol = x;
-            for( availableSlotPos = 0; availableSlotPos < parent[parentSymbol].length; ++availableSlotPos) {
-                if(parent[parentSymbol][availableSlotPos] === null) {
-                    break;
-                }
-            }
+        if(availableSlotPos === undefined) {
+            throw "no slot found";
         }
-        // ViableChildrens should be list of functions or variables, which have output of given type or are of given type
         // Candidate list should be program.functions
-        var requiredType = program.functions[parentSymbol]['typeSig'][0][availableSlotPos];
+        var parentObj = parentPropertyTrace[parentPropertyTrace.length - 1];
+        var requiredType;
+        if(parentObj === 'returnNode') {
+            requiredType = program.functions[parentFunc]['typeSig'][1];
+        } else {
+            requiredType = program.functions[parentObj]['typeSig'][0][availableSlotPos];
+        }
 
         var viableChildren = [];
-        for(var func in program.functions) {
-            if(program.functions[func]['typeSig'][1] === requiredType) {
-                var tempObject = {};
-                tempObject[func] = program.functions[func];
-                viableChildren.push(tempObject);
+        var allNodes = program.getAllNodes(parentFunc);
+        for(var func in allNodes) {
+            if((allNodes[func]['typeSig'].length === 1 && allNodes[func]['typeSig'][0] === requiredType) || 
+            (allNodes[func]['typeSig'][1] === requiredType && allNodes[func]['placable'] !== false)) {
+                viableChildren.push(func);
             }
         }
 
-        // TODO: Get variable children
-        var localVariables = program.findLocalVariables(parentFunc);
-        for(var variable in localVariables) {
-            if(localVariables[variable]['typeSig'][0] === requiredType) {
-                var tempObject = {};
-                tempObject[variable] = localVariables[variable];
-                viableChildren.push(tempObject);
-            }
+        if(viableChildren.length === 0) {
+            console.log("no viable Children");
+            return ['doNothing', []];
         }
 
-        var child = getRandomElement(viableChildren, flip);
-        return [addBoundNode, [child, parent, parentSymbol, availableSlotPos]];
+        var child = stGetRandomElement(viableChildren);
+        return ['addBoundNode', [child, parentFunc, parentPropertyTrace, availableSlotPos]];
     } else if(actionType === 'replace') {
         var viableFunctions = getConstrainedFunction(functionSet, function(lambda) {
             return (func.slotsAvailable > 0)
@@ -407,8 +470,8 @@ var sampleProgramAction = function(program) {
     // match subtree in graph and replace subtree with function node,
     // add function node to set
     else if(actionType === 'lamdarise') {
-    } else if(actionType === doNothing) {
-        return [doNothing, []];
+    } else if(actionType === 'doNothing') {
+        return ['doNothing', []];
     } else {
         throw "Action " + actionType + " type not found";
     }
@@ -416,11 +479,11 @@ var sampleProgramAction = function(program) {
 
 // var prog;
 // window.onload = function() {
-    // prog = new Program();
-    // for(var i = 0; i < 30; ++i) {
-        // $('#canvas').empty();
-        // action = sampleAction(prog);
-        // action[0].apply(prog, action[1]);
-    // }
-    // prog.draw();
+// prog = new Program();
+// for(var i = 0; i < 30; ++i) {
+// $('#canvas').empty();
+// action = sampleAction(prog);
+// action[0].apply(prog, action[1]);
+// }
+// prog.draw();
 // };

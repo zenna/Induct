@@ -1,105 +1,229 @@
-// TODO: Integrate state queries into functions - Easy
-// TODO: Work out action sampling model - HARD
-// TODO: work out compilation - EASY
+// TODO" account for complete functions - solution, take care of this in action sampler
+// TODO: fix naming system
+// TODO: generalise statefulIf
 // TODO: Work out likelihood estimation - EASY for first implementation, HARD in general
 // TODO: Reuse program at each step - EASY
 // TODO: Prevent recursiveness or put time guards on these programs - MEDIUM
-// TODO: Copy program to avoid desctructiveness - EASY
+// TODO: allow first class functions
+// TODO: Investigate guaranteed halting recursive schemes (e.g. primitive recursion, typed)
+// TODO: Investigate giving partial credit to non halting programs (e.g. functional reactive programming)
+// TODO: Make action sampling under modification
+// TODO: Change number to float and int, add parse int, parse float
+// TODO: Implement lambarise, replaceNode, deleteNode,
+// TODO: add random primitives
+// TODO: The problem is that I have a tree, possibily infite.  And of that tree I have a path.
+// I also have a method of generating paths/.
+// frequentist approach would be to find number of times data appears
+// Basically I have to find the region of this tree which is closed over by my model
 
-// If the value with specified params is stored in database, get its value
-// Otherwise sample
-var ii = 0;
-
-function arrays_equal(a,b) { return !(a<b || b<a); }
-
-var stUnif = function() {
-	var theta = Array.prototype.slice.call(arguments);
-	var currentParams = {type:'unif', theta:theta};
-	var name = ii;
-	ii += 1;
-	if (name in database && currentParams.type == database[name].type) {
-		var dbParams = database[name];
-		if (arrays_equal(currentParams.theta,dbParams.theta)) {
-			return dbParams['value'];
-		}
-		else {
-			var l = Math.log(computeLikelihood());
-			database.name.l = l;
-			logLikelihood = logLikelihood + l;
-		}
-	}
-	else {
-		var sampledValue = Math.random();
-		database[name] = {};
-		database[name]['value'] = sampledValue;
-		database[name]['type'] = 'unif';
-		database[name]['theta'] = theta;
-		return sampledValue;
-	}
-}
-
-var stRandInteger = function(lowerBound, upperBound) {
-    return Math.floor(stUnif() * (upperBound - lowerBound)) + lowerBound;
-}
-
-// TODO - make this do as intended
-var stGetRandomElement = function(list) {
-    return list[stRandInteger(0, list.length)];
-}
+// Problem is havent worke dout likelihood estimation, acceptance ratio is far too high, action can be put down
 
 
 var selectRlProgramModel = function(observedData, numSamples, stateQueries) {
-    return testModel;
-    var time = 0;n
+    if ($('#buildModel').is(':checked') === false) {
+    	    return testModel;
+    }
+    var time = 0;
     // Sparse Sampling Params
-    var numSamples = 10;
+    var programNumSamples = 5;
     var depth = 7;
     var discount = 1.5;
 
-    // Need to compile it here down to function
-    return doLearning(time, new Program(observedData), new programWorld(new Program(observedData)), sampleProgramAction, selectPosteriorModel, numSamples, depth, discount, stateQueries);
+    var programStateQueries = {
+        canContinue : {
+            modifyable : false,
+            placable : false,
+            typeSig : [['number', 'state'], 'bool'],
+            codeAsFunction : function(time, state) {
+                return time < 10 ? true : false;
+            }
+
+        },
+        addBoundNode : {
+            modifyable : false,
+            placable : false,
+            typeSig : [['number', 'state'], 'bool'],
+            codeAsFunction : function(program, child, parentFunc, parentPropertyTrace, availableSlotPos) {
+                return addBoundNode(program, child, parentFunc, parentPropertyTrace, availableSlotPos);
+            }
+
+        },
+        doNothing : {
+            modifyable : false,
+            placable : false,
+            typeSig : [['number', 'state'], 'bool'],
+            codeAsFunction : function() {
+                return;
+            }
+
+        }
+    }
+
+    var newState = doLearning(time, [], new Program(observedData, stateQueries), new programWorld(new Program(observedData, stateQueries)), sampleProgramAction, selectPosteriorModel, programNumSamples, depth, discount, programStateQueries);
+    $('#canvas').empty();
+    newState.draw();
+    var model = newState.compileAll();
+    return model;
 }
 
 var doLearning = function(time, observedData, state, domain, sampleAction, selectModel, numSamples, depth, discount, stateQueries) {
-    if(stateQueries[0](time, state) === true) {
+    if(stateQueries['canContinue']['codeAsFunction'](time, state) === true) {
         console.log("New Round");
-        var currentModel = selectModel(observedData, 10, stateQueries); // TODO: These args not relevant for selectRLProgramModel?
+        var currentModel = selectModel(observedData, 10, stateQueries);
+        // TODO: These args not relevant for selectRLProgramModel?
         var bestAction = sparseSampleMcmc(depth, numSamples, discount, currentModel, state, sampleAction, stateQueries);
         var newStateReward = domain.executeAction(bestAction, stateQueries);
         observedData.push(bestAction, newStateReward[1], newStateReward[0]);
         console.log(time);
-        console.log(bestAction);
-        setTimeout(doLearning, 100, time + 1, observedData, newStateReward[0], domain, sampleAction, selectRlProgramModel, numSamples, depth, discount, stateQueries);
-    } else {
+        return doLearning(time + 1, observedData, newStateReward[0], domain, sampleAction, selectModel, numSamples, depth, discount, stateQueries);
+    }
+    else {
         console.log("Game Over");
         return state;
     }
 }
 
+var doLearningInnerLoop = function(time, observedData, stateHolder, domain, sampleAction, selectModel, numSamples, depth, discount, stateQueries) {
+    console.log("new Round, time = " + time);
+    var state = stateHolder.state;
+    var currentModel = selectModel(observedData, 10, stateQueries);
+    var bestAction = sparseSampleMcmc(depth, numSamples, discount, currentModel, state, sampleAction, stateQueries);
+    var newStateReward = domain.executeAction(bestAction, stateQueries);
+    observedData.push(bestAction, newStateReward[1], newStateReward[0]);
+    stateHolder.state = newStateReward[0];
+}
+
+var doLearningLoops = function(time, observedData, state, domain, sampleAction, selectModel, numSamples, depth, discount, stateQueries) {
+    stateHolder = {};
+    stateHolder.state = state;
+    while(stateQueries['canContinue']['codeAsFunction'](time, stateHolder.state) === true) {
+        setTimeout(doLearningInnerLoop, 1000, time, observedData, stateHolder, domain, sampleAction, selectModel, numSamples, depth, discount, stateQueries);
+        time += 1;
+    }
+    return state;
+}
 
 
 $(document).ready(function() {
-    $('body').click(function() {
+    $('#go').click(function() {
         console.log("Starting RL");
         var numIterations = 5;
         var time = 0;
         // Sparse Sampling Params
-        var numSamples = 1000;
-        var depth = 8;
+        var numSamples = 200;
+        var depth = 200;
         var discount = 1.5;
 
         // Domain params
-        var sizeX = 100;
-        var sizeY = 100;
-        var startPosX = 50;
-        var startPosY = 50;
-        var stateQueries = [canContinue, getWorldSize, getAgentPosition];
-        var sampleAction = function(state) {
-        	var possibleActions = ["moveUp", "moveDown", "moveLeft", "moveRight", "dontMove"];
-        	return stGetRandomElement(possibleActions);
+        var sizeX = $("#boardSize").val();
+        var sizeY = $("#boardSize").val();
+ 		var startPosX = 7;
+ 		var startPosY = 7;
+        // var startPosX = sizeX % 0;
+        // var startPosY = sizeY % 0;
+        var stateQueries = {
+            'canContinue' : {
+                modifyable : false,
+                placable : false,
+                typeSig : [['number', 'state'], 'bool'],
+                codeAsFunction : function(time, state) {
+                    return time < 10000 ? true : false;
+                }
+
+            },
+            'moveUp' : {
+                modifyable : true,
+                placable : false,
+                typeSig : [['state'], 'state'],
+                codeAsTree : {
+                    returnNode : [null]
+                }
+            },
+            'moveDown' : {
+                modifyable : true,
+                placable : false,
+                typeSig : [['state'], 'state'],
+                codeAsTree : {
+                    returnNode : [null]
+                }
+            },
+            'moveLeft' : {
+                modifyable : true,
+                placable : false,
+                typeSig : [['state'], 'state'],
+                codeAsTree : {
+                    returnNode : [null]
+                }
+            },
+            'moveRight' : {
+                modifyable : true,
+                placable : false,
+                typeSig : [['state'], 'state'],
+                codeAsTree : {
+                    returnNode : [null]
+                }
+            },
+            'getAgentX' : {
+                modifyable : false,
+                typeSig : [['state'], 'number'],
+                codeAsFunction : function(state) {
+                    return state[2];
+                }
+
+            },
+            'getAgentY' : {
+                modifyable : false,
+                typeSig : [['state'], 'number'],
+                codeAsFunction : function(state) {
+                    return state[3];
+                }
+
+            },
+            'getWorldX' : {
+                modifyable : false,
+                typeSig : [['state'], 'number'],
+                codeAsFunction : function(state) {
+                    return state[0];
+                }
+
+            },
+            getWorldY : {
+                modifyable : false,
+                typeSig : [['state'], 'number'],
+                codeAsFunction : function(state) {
+                    return state[1];
+                }
+
+            },
+            setPosX : {
+                modifyable : false,
+                typeSig : [['state', 'number'], 'state'],
+                codeAsFunction : function(state, xPosition) {
+                    var newState = jQuery.extend(true, {}, state);
+                    newState[2] = xPosition;
+                    return newState;
+                }
+
+            },
+            setPosY : {
+                modifyable : false,
+                typeSig : [['state', 'number'], 'state'],
+                codeAsFunction : function(state, xPosition) {
+                    var newState = jQuery.extend(true, {}, state);
+                    newState[3] = xPosition;
+                    return newState;
+                }
+
+            }
+        };
+        sampleAction = function(state) {
+            var possibleActions = ["moveUp", "moveDown", "moveLeft", "moveRight", "dontMove"];
+            return [stGetRandomElement(possibleActions), []];
         }
+
         var initialState = createInitialState(sizeX, sizeY, startPosX, startPosY);
         var observedData = [initialState];
-        doLearning(time, observedData, initialState, new perimeterWorld(initialState), sampleAction, selectRlProgramModel, numSamples, depth, discount, stateQueries);
+        doLearningLoops(time, observedData, initialState, new perimeterWorld(initialState), sampleAction, selectRlProgramModel, numSamples, depth, discount, stateQueries);
     })
+
 })

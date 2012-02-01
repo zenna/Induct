@@ -178,8 +178,8 @@ The following listing shows our implementation of sparse sampling in Church.
 
 \subsubsection*{Markov Chain Monte Carlo through simulation space}
 Naive sparse sampling is intractable.
-If we consider sparse sampling as defining a fully balanced tree of finite or infinite depth, we are interesting in exploring areas of that tree of most interest.
-
+If we consider sparse sampling as defining a fully balanced tree of finite or infinite depth, we are interested in exploring areas of that tree with the highest reward.	
+We can consider a single trace, as a series of action choices which define one possible route through the simulation space.
 
 \lstset{language=Lisp}
 \begin{lstlisting}[caption={Sparse Sampling},label=sparse]
