@@ -1,0 +1,103 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Apt and Bol}{Apt and Bol}{1994}]{apt:94}
+{\sc Apt, K.} {\sc and} {\sc Bol, R.} 1994.
+\newblock Logic programming and negation: A survey.
+\newblock {\em Journal of Logic Programming\/}~{\em 19,20}, 9--71.
+
+\bibitem[\protect\citeauthoryear{Brewka}{Brewka}{1996}]{brewka:plp}
+{\sc Brewka, G.} 1996.
+\newblock Well-founded semantics for extended logic programs with dynamic
+  preferences.
+\newblock {\em Journal of Artificial Intelligence Research\/}~{\em 4}, 19--36.
+
+\bibitem[\protect\citeauthoryear{Brewka and Eiter}{Brewka and
+  Eiter}{1999}]{be:aij}
+{\sc Brewka, G.} {\sc and} {\sc Eiter, T.} 1999.
+\newblock Preferred answer sets for extended logic programs.
+\newblock {\em Artificial Intelligence\/}~{\em 109}, 297--356.
+
+\bibitem[\protect\citeauthoryear{Choelwinski}{Choelwinski}{1994}]{ch:stra}
+{\sc Choelwinski, P.} 1994.
+\newblock Stratified default logic.
+\newblock In {\em Proceedings of Computer Science Logic}. Springer, LNCS 933,
+  456--470.
+
+\bibitem[\protect\citeauthoryear{Das}{Das}{1992}]{lp:92}
+{\sc Das, S.} 1992.
+\newblock {\em Deductive Database and Logic Programming}.
+\newblock Addison-Wesley Publishers Ltd.
+
+\bibitem[\protect\citeauthoryear{Delgrande, Schaub, and Tompits}{Delgrande
+  et~al\mbox{.}}{2000}]{d:plp}
+{\sc Delgrande, J.}, {\sc Schaub, T.}, {\sc and} {\sc Tompits, H.} 2000.
+\newblock Logic programs with complied preferences.
+\newblock In {\em Proceedings of the 14th European Conference on Artificial
+  Intelligence (ECAI-2000)}. 392--398.
+
+\bibitem[\protect\citeauthoryear{Gelfond and Lifschitz}{Gelfond and
+  Lifschitz}{1988}]{gl:stable}
+{\sc Gelfond, M.} {\sc and} {\sc Lifschitz, V.} 1988.
+\newblock The stable model semantics for logic programming.
+\newblock In {\em Proceedings of the Fifth Joint International Conference and
+  Symposium}. MIT Press, 1070--1080.
+
+\bibitem[\protect\citeauthoryear{Gelfond and Lifschitz}{Gelfond and
+  Lifschitz}{1991}]{gl:logic}
+{\sc Gelfond, M.} {\sc and} {\sc Lifschitz, V.} 1991.
+\newblock Classical negation in logic programs and disjunctive databases.
+\newblock {\em New Generation Computing\/}~{\em 9}, 365--386.
+
+\bibitem[\protect\citeauthoryear{Gelfond and Son}{Gelfond and
+  Son}{1998}]{ms:98}
+{\sc Gelfond, M.} {\sc and} {\sc Son, T.} 1998.
+\newblock Reasoning with prioritized defaults.
+\newblock In {\em LNAI 1471}. Springer, 164--224.
+
+\bibitem[\protect\citeauthoryear{Grosof}{Grosof}{1997}]{g:97}
+{\sc Grosof, B.} 1997.
+\newblock Prioritized conflict handling for logic programs.
+\newblock In {\em Proceedings of the 1997 International Logic Program Symposium
+  (ILPS'97)}. MIT Press, 197--212.
+
+\bibitem[\protect\citeauthoryear{Lifschitz and Turner}{Lifschitz and
+  Turner}{1994}]{lt:lp94}
+{\sc Lifschitz, V.} {\sc and} {\sc Turner, H.} 1994.
+\newblock Splitting a logic program.
+\newblock In {\em Proceedings of Eleventh International Conference on Logic
+  Programming}. MIT Press, 23--37.
+
+\bibitem[\protect\citeauthoryear{Schaub and Wang}{Schaub and
+  Wang}{2001}]{sw:01}
+{\sc Schaub, T.} {\sc and} {\sc Wang, K.} 2001.
+\newblock A comparative study of logic programs with preference.
+\newblock In {\em Proceedings of the 17th International Joint Conference on
+  Artificial Intelligence (IJCAI-2001)}. Morgan Kaufmann Publishers Inc.,
+  597--602.
+
+\bibitem[\protect\citeauthoryear{Wang, Zhou, and Lin}{Wang
+  et~al\mbox{.}}{2000}]{w:plp}
+{\sc Wang, K.}, {\sc Zhou, L.}, {\sc and} {\sc Lin, F.} 2000.
+\newblock Alternating fixpoint theory for logic programs with priority.
+\newblock In {\em Proceedings of International Joint Conference on
+  Computational Logic (CL-2000)}. 164--178.
+
+\bibitem[\protect\citeauthoryear{Zhang}{Zhang}{1999}]{yan:iclp99}
+{\sc Zhang, Y.} 1999.
+\newblock Monotonicity in rule based update.
+\newblock In {\em Proceedings of the 1999 International Conference on Logic
+  Programming (ICLP'99)}. MIT Press, 471--485.
+
+\bibitem[\protect\citeauthoryear{Zhang}{Zhang}{2001}]{yan:00lp}
+{\sc Zhang, Y.} 2001.
+\newblock The complexity of logic program update.
+\newblock In {\em Proceedings of the 14th Australian Joint Conference on
+  Artificial Intelligence (AI2001)}. Springer, LNAI 2256, 630--643.
+
+\bibitem[\protect\citeauthoryear{Zhang and Foo}{Zhang and Foo}{1997}]{yan:plp}
+{\sc Zhang, Y.} {\sc and} {\sc Foo, N.} 1997.
+\newblock Answer sets for prioritized logic programs.
+\newblock In {\em Proceedings of the 1997 International Logic Programming
+  Symposium (ILPS'97)}. MIT Press, 69--83.
+
+\end{thebibliography}

@@ -1,0 +1,64 @@
+% TLP2esam.tex / sample pages for TLP
+% v2.11, released 6-nov-2002
+
+\documentclass{tlp}
+\usepackage{aopmath}
+
+\begin{document}
+\bibliographystyle{acmtrans}
+
+\title{The RL Super-Learning Bot-Machine-Program}
+
+\author[Z. Tavares, M. Siegel]
+{TAVARES ZENNA \\
+MIT\\
+E-mail: zenna@mit.edu
+}
+
+% \author[M. SIEGEL]
+% {SIEGEL MAX \\
+% MIT\\
+% E-mail: maxs@mit.edu
+% }
+
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+
+\maketitle
+
+\label{firstpage}
+
+\begin{abstract}
+%
+Boom!
+
+\end{abstract}
+
+The idea is to simultaneously learn a model and use that model to plan in some set of domains.
+The model is represented as a probabilistic program P we can sample new world states from.
+That is, a model is a random variable from a current state and some random input to a representation of the world and the reward.  If there are $S$ states, the set of all of states = \mathcal{S} = \mathcal{P}(S).  A model is then:
+
+\[
+P : \Omega \times \mathcal{S} \to \mathcal{S} \times R
+\]
+
+Suppose the set of all type-consistent well forms programs defines a language $L$.
+We have an initial set of actions $A_init$ which are syntactic transformations on $P$. I.e.,
+
+\[
+a: \mathcal{L} \to \mathcal{L}.
+\]
+
+\subsection{Building a model}
+We build the model by applying syntax transformations to the model
+A model is evaluated by how well it performs in the 
+
+
+\subsection{Domain}
+We wil use the Arcade Learning Environment
+
+\bibliography{tlp2esam}
+
+\end{document}
+
+
+

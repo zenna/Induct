@@ -1,0 +1,1387 @@
+% -*- Text -*-
+
+@string{icse = "{International Conference on Software Engineering}"}
+@string{popl = "{ACM} Conference Principles of Programming Languages"}
+@string{lfp = "{ACM} Symposium on {L}isp and {F}unctional {P}rogramming"}
+@string{lasc = "{Lisp and Symbolic Computation}"}
+@string{pldi = "{ACM} {SIGPLAN} Conference on {P}rogramming {L}anguage {D}esign and {I}mplementation"}
+@string{icfp = "{ACM SIGPLAN International Conference on Functional Programming}"}
+@string{toplas = "{ACM} Transactions on Programming Languages and Systems"}
+@string{cacm = "{Communications of the ACM}"}
+@string{icalp = "{International Conference on Automata, Languages and Programming}"}
+@string{tcs = "{Theoretical Computer Science}"}
+@string{sas = "{Static Analysis Symposium}"}
+@string{esop = "{European Symposium on Programming}"}
+@string{lncs = "{Lecture Notes in Computer Science}"}
+@string{tr = "Technical Report"}
+@string{rice = "Rice University"}
+@string{tools = "{Technology of Object-Oriented Languages and Systems}"}
+@string{manuscript = "Unpublished manuscript"}
+@string{dsl = "{USENIX} Conference on Domain-Specific Languages"}
+@string{ecoop = "{European Conference on Object-Oriented Programming}"}
+@string{tose = "{IEEE Transactions on Software Engineering}"}
+@string{ieee-software = "{IEEE Software}"}
+@string{gcse = "{International Symposium on Generative and Component-Based Software Engineering}"}
+@string{jfp = "{Journal of Functional Programming}"}
+@string{scp = "Science of {C}omputer {P}rogramming"}
+
+@book{LaTeX,
+  author="L.~Lamport",
+  title="\LaTeX: A Document Preparation System",
+  publisher="Addison-Wesley, New York",
+  year="1986",
+  edition="2"}
+
+@book{Butcher,
+  author="J.~Butcher",
+  title="Copy-editing: The Cambridge Handbook",
+  publisher="Cambridge University Press",
+  year="1981"}
+
+@book{Chicago,
+  editor = {J.~Grossman},
+  title="The Chicago Manual of Style",
+  publisher="University of Chicago Press",
+  year="1982"}
+
+@techreport{admt:profiling,
+  author="Andrew W.~Appel and Bruce F.~Duba and David B.~Mac{Q}ueen
+    and Andrew P.~Tolmach",
+  title="Profiling in the Presence of Optimization and Garbage
+    Collection",
+  institution="{P}rinceton {U}niversity",
+  year="1988",
+  type="Technical Report",
+  number="CS-TR-197-88",
+  month=nov}
+
+@inproceedings{br:synclo,
+  author="Alan Bawden and Jonathan Rees",
+  title="Syntactic Closures",
+  booktitle=lfp,
+  year="1988",
+  pages="86--95"}
+
+@manual{gb:donkey,
+  title="{D}onkey Reference Manual",
+  author="Gann Bierner",
+  organization="{R}ice {U}niversity"}
+
+@inproceedings{fb:syntox,
+  author="Fran{\c c}ois Bourdoncle",
+  title="Abstract Debugging of Higher-Order Imperative Languages",
+  booktitle=pldi,
+  year="1993",
+  pages="46--55"}
+
+@booklet{crs:chez,
+  title="{\it {C}hez} {S}cheme {R}eference {M}anual",
+  author="{{C}adence {R}esearch {S}ystems}",
+  year="1994"}
+
+@article{ci:gramps,
+  author="Robert D.~Cameron and M.~Robert Ito",
+  title="Grammar-Based Definition of Metaprogramming Systems",
+  journal=toplas,
+  year="1984",
+  volume="6",
+  number="1",
+  pages="20--54",
+  month=jan}
+
+@techreport{cma:extensible,
+  author="Luca Cardelli and Florian Matthes and Mart\'{\i}n Abadi",
+  title="Extensible Syntax with Lexical Scoping",
+  institution="Digital SRC",
+  year="1994",
+  type="Research Report",
+  number="121"}
+
+@unpublished{cp:domain-theory,
+  title="Domain Theory: An Introduction",
+  author="Robert Cartwright and Rebecca Parsons",
+  note=manuscript,
+  month=jan,
+  year="1994"}
+
+@article{hc:adaptable-grammars,
+  author="Henning Christiansen",
+  title="A Survey of Adaptable Grammars",
+  journal="{SIGPLAN Notices}",
+  year="1990",
+  volume="25",
+  number="11",
+  pages="35--44",
+  month=nov}
+
+@article{cr:r4rs,
+  author="William Clinger and Jonathan Rees",
+  title="The Revised${}^4$ Report on the Algorithmic Language
+    {S}cheme",
+  journal="{ACM} {L}isp Pointers",
+  year="1991",
+  volume="4",
+  number="3",
+  month="July"}
+
+@inproceedings{cr:mtw,
+  author="William Clinger and Jonathan Rees",
+  title="Macros That Work",
+  booktitle=popl,
+  year="1991",
+  pages="155--162"}
+
+@book{dp:lattices-and-order,
+  title="Introduction to Lattices and Order",
+  author="B.~A.~Davey and H.~A.~Priestley",
+  publisher="Cambridge",
+  year="1990"}
+
+@book{rkd:spl,
+  author="R.~Kent Dybvig",
+  title="The {S}cheme Programming Language",
+  publisher="{P}rentice-{H}all",
+  year="1987",
+  edition="1"}
+
+@article{dfh:eps,
+  author="R.~Kent Dybvig and Daniel P.~Friedman and Christopher
+    T.~Haynes",
+  title="Expansion-Passing Style: A General Macro Mechanism",
+  journal=lasc,
+  year="1988",
+  volume="1",
+  number="1",
+  pages="53--75",
+  month=jan}
+
+@article{dhb:sc,
+  author="R.~Kent Dybvig and Robert Hieb and Carl Bruggeman",
+  title="Syntactic abstraction in {S}cheme",
+  journal=lasc,
+  year="1993",
+  volume="5",
+  number="4",
+  pages="295--326",
+  month=dec}
+
+@article{je:cfl-parse,
+  author="Jay Earley",
+  title="An Efficient Context-Free Parsing Algorithm",
+  journal=cacm,
+  year="1970",
+  volume="13",
+  number="2",
+  pages="94--102",
+  month=feb}
+
+@techreport{me:bochser,
+  author="Michael Eisenberg",
+  title="Bochser: an Integrated {S}cheme Programming System",
+  institution="{MIT}",
+  year="1985",
+  type="Technical Report",
+  number="349",
+  month=oct}
+
+@article{mf:expressive,
+  author="Matthias Felleisen",
+  title="On the Expressive Power of Programming Languages",
+  journal=scp,
+  year="1991",
+  volume="17",
+  pages="35--75"}
+
+@inproceedings{jf:rewrite,
+  author="John Field",
+  title="A Simple Rewriting Semantics for Realistic Imperative
+    Programs and its Application to Program Analysis",
+  booktitle="Workshop on Partial Evaluation and Semantics-Based
+    Program Transformation",
+  year="1992",
+  pages="98--107"}
+
+@inproceedings{ffkwf:mrspidey,
+  author="Cormac Flanagan and Matthew Flatt and Shriram Krishnamurthi
+    and Stephanie Weirich and Matthias Felleisen",
+  title="Catching Bugs in the Web of Program Invariants",
+  booktitle=pldi,
+  year="1996",
+  pages="23--32",
+  month=may}
+
+@techreport{mf:mzscheme,
+  title="{PLT} {M}z{S}cheme: Language Manual",
+  author="Matthew Flatt",
+  organization="{R}ice {U}niversity",
+  number="TR97-280",
+  type=tr,
+  institution=rice,
+  year="1997"}
+
+@techreport{ff:mred,
+  title="{PLT} {M}r{E}d: Graphical Toolbox Manual",
+  author=" Matthew Flatt and Robert Bruce Findler",
+  organization="{R}ice {U}niversity",
+  year="1997",
+  type=tr,
+  institution=rice,
+  number="TR97-279"}
+
+@book{cg:semantics-book,
+  author="Carl A.~Gunter",
+  title="Semantics of Programming Languages",
+  publisher="{MIT} Press",
+  year="1992"}
+
+@inproceedings{hr:prog-depend-graph,
+  author="Susan Horowitz and Thomas W.~Reps",
+  title="The Use of Program Dependence Graphs in Software Engineering",
+  booktitle="Proceedings of the Fourteenth International Conference on Software Engineering",
+  year="1992",
+  pages="392--411",
+  month=may}
+
+@article{hrb:slicing,
+  author="Susan Horowitz and Thomas Reps and David Binkley",
+  title="Interprocedural Slicing Using Dependence Graphs",
+  journal=toplas,
+  year="1990",
+  volume="12",
+  number="1",
+  pages="26--60",
+  month=jan}
+
+@techreport{scj:yacc,
+  author="Steven C.~Johnson",
+  title="{YACC}~---~Yet Another Compiler Compiler",
+  institution="{AT\&T} {B}ell {L}aboratories",
+  year="1975",
+  type="{C}omputing {S}cience Technical Report",
+  number="32",
+  address="Murray Hill, NJ, USA"}
+
+@unpublished{tvj:macros-for-all,
+  author="Todd V.~Jonker",
+  title="Macros for All Languages",
+  note=manuscript,
+  year="1989"}
+
+@article{kr:scheme48,
+  author="Richard Kelsey and Jonathan Rees",
+  title="A Tractable {S}cheme Implementation",
+  journal=lasc,
+  year="1994",
+  volume="5",
+  number="4",
+  pages="315--335"}
+
+@inproceedings{kmt:parascope,
+  author="Ken Kennedy and Kathryn S.~M\raisebox{.2em}{c}Kinley and
+    C.-W.~Tseng",
+  title="Analysis and Transformation in the {ParaScope Editor}",
+  booktitle="Proceedings of the 1991 ACM International Conference
+    on Supercomputing",
+  month=jun,
+  year="1991"}
+
+@book{kr:c,
+  author="Brian W.~Kernighan and Dennis M.~Ritchie",
+  title="The {C} Programming Language",
+  publisher="Prentice Hall",
+  year="1988"}
+
+@inproceedings{khc:monitor,
+  author="Amir Kishon and Paul Hudak and Charles Consel",
+  title="Monitoring Semantics: a Formal Framework for Specifying,
+    Implementing and Reasoning About Execution Monitors",
+  booktitle=pldi,
+  year="1991",
+  pages="338--352",
+  month=jun}
+
+@article{dek:attribute-grammars,
+  author="Donald E.~Knuth",
+  title="Semantics of Context-Free Languages",
+  journal="Mathematical Systems Theory",
+  year="1968",
+  volume="2",
+  number="2",
+  pages="127--145"}
+
+@phdthesis{ek:thesis,
+  author="Eugene E.~Kohlbecker",
+  title="Syntactic Extensions in the Programming Language {L}isp",
+  school="{I}ndiana {U}niversity",
+  year="1986",
+  month=aug}
+
+@inproceedings{kffd:hygiene,
+  author="Eugene E.~Kohlbecker and Daniel P.~Friedman and Matthias
+    Felleisen and Bruce F.~Duba",
+  title="Hygienic Macro Expansion",
+  booktitle=lfp,
+  year="1986",
+  pages="151--161"}
+
+@inproceedings{kw:mbe,
+  author="Eugene E.~Kohlbecker and Mitchell Wand",
+  title="Macros-by-Example: Deriving Syntactic Transformations from
+    their Specifications",
+  booktitle=popl,
+  year="1987",
+  pages="77--84"}
+
+@techreport{sk:zodiac,
+  title="Zodiac: A Framework for Building Interactive Programming Tools",
+  author="Shriram Krishnamurthi",
+  organization="{R}ice {U}niversity",
+  year="1996",
+  type=tr,
+  institution=rice,
+  number="TR96-262"}
+
+@book{pl:rcg,
+  author="Peter Lee",
+  title="Realistic Compiler Generation",
+  publisher="{MIT} Press",
+  year="1989"}
+
+@techreport{mel:lex,
+  author="Michael E.~Lesk",
+  title="{Lex}~---~A Lexical Analyzer Generator",
+  institution="{AT\&T} {B}ell {L}aboratories",
+  year="1975",
+  type="{C}omputing {S}cience Technical Report",
+  number="39",
+  address="Murray Hill, NJ, USA"}
+
+@inproceedings{mr:ml-parsers,
+  author="Michel Mauny and Daniel de Rauglaudre",
+  title="Parsers in {ML}",
+  booktitle=lfp,
+  year="1992",
+  pages="76--85"}
+
+@techreport{pm:sis,
+  author="Peter Mosses",
+  title="{SIS}~---~{S}emantics {I}mplementation {S}ystem",
+  institution="Computer Science Department, {A}arhus {U}niversity",
+  type="Technical Report",
+  number="{DAIMI} {MD}-30",
+  year="1979",
+  address="{\AA}rhus, {D}enmark"}
+
+@phdthesis{lp:compiler-generator,
+  author="Lawrence Paulson",
+  title="A Compiler Generator for Semantic Grammars",
+  school="{S}tanford {U}niversity",
+  year="1981"}
+
+@article{gdp:lcf-as-pl,
+  author="Gordon D.~Plotkin",
+  title="{LCF} Considered as a Programming Language",
+  journal=tcs,
+  year="1977",
+  pages="223--255"}
+
+@book{rt:sg,
+  author="Thomas W.~Reps and Tim Teitelbaum",
+  title="The Synthesizer Generator",
+  publisher="Springer-Verlag",
+  year="1989"}
+
+@inproceedings{sc:scannerless-nslr1,
+  author="Daniel J.~Salomon and Gordon V.~Cormack",
+  title="Scannerless {NSLR}(1) Parsing of Programming Languages",
+  booktitle=pldi,
+  year="1989",
+  pages="170--178"}
+
+@techreport{ss:cfg-parse,
+  author="Sriram Sankar",
+  title="An Efficient Top-Down Parsing Algorithm for General
+    Context-Free Grammars",
+  institution="{S}tanford {U}niversity",
+  year="1993",
+  type="Technical Report",
+  number="CSL-TR-93-562",
+  month=feb}
+
+@phdthesis{wls:thesis,
+  author="William L.~Scherlis",
+  title="Expression Procedures and Program Derivation",
+  school="{S}tanford {U}niversity",
+  year="1980"}
+
+@inproceedings{sp:profiling,
+  author="Paul Sansom and Simon {Peyton Jones}",
+  title="Time and Space Profiling for Non-Strict, Higher-Order
+    Functional Languages",
+  booktitle=popl,
+  year="1995",
+  pages="355--366",
+  month=jan}
+
+@inproceedings{dss:domains-denot-sem,
+  author="Dana S.~Scott",
+  title="Domains for Denotational Semantics",
+  booktitle=icalp,
+  year="1982"}
+
+@book{mt:compiler-generator,
+  author="Mads Tofte",
+  title="Compiler Generators",
+  publisher="Springer-Verlag",
+  year="1990"}
+
+@article{tl:evaltrace,
+  author="David Touretzky and Peter Lee",
+  title="Visualizing Evaluation in Applicative Languages",
+  journal=cacm,
+  year="1992",
+  volume="35",
+  number="10",
+  month=oct}
+
+@article{mw:deriv,
+  author="Mitchell Wand",
+  title="Deriving Target Code as a Representation of Continuation
+    Semantics",
+  journal=toplas,
+  year="1991",
+  volume="4",
+  pages="496--517"}
+
+@inproceedings{wc:c-macros,
+  author="Daniel Weise and Roger Crew",
+  title="Programmable Syntax Macros",
+  booktitle=pldi,
+  year="1993",
+  pages="156--165",
+  month=jun}
+
+@techreport{dsw:popart,
+  author="David S.~Wile",
+  title="{POPART}: Producer of Parsers and Related Tools",
+  institution="{U}niversity of {S}outhern {C}alifornia",
+  year="1981",
+  type="Technical Report",
+  month=oct}  
+
+@inproceedings{wc:soft,
+  author="Andrew K.~Wright and Robert Cartwright",
+  title="A Practical Soft Type System for {S}cheme",
+  booktitle=lfp,
+  year="1994",
+  month=jun}
+
+%% Robby additions from here
+
+@inproceedings{ff:componential,
+  author = "Cormac Flanagan and Matthias Felleisen",
+  title = "Componential Set-Based Analysis",
+  booktitle = pldi,
+  year = 1997}
+
+@techreport{ff:sba,
+  author = "Cormac Flanagan and Matthias Felleisen",
+  title = "Modular and Polymorphic Set-Based Analysis: Theory and Practice",
+  year = 1996,
+  type = tr, 
+  number = "{TR-96-266}",
+  institution = rice}
+
+@manual{mit-scheme,
+ title="{MIT Scheme Reference}",
+ author="Chris Hanson and {The MIT Scheme Team} and {A Cast of Thousands}",
+ year="1993"}
+
+@manual{manual:microsoft-dev-studio,
+  title="{M}icrosoft {D}eveloper {S}tudio",
+  organization="{M}icrosoft", 
+  key="{M}icrosoft", 
+  year=1995}
+
+@manual{manual:borland-c++,
+  title="{B}orland {C++Builder} 5 Developer's Guide",
+  year="1983, 2000",
+  organization="{INPRISE} Corporation, Inc.",
+  key="Borland"}
+  
+@manual{manual:code-warrior,
+  title="{C}ode{W}arrior",
+  organization="Metrowerks",
+  key="Metrowerks",
+  year="1993--1996"}
+
+@manual{manual:mlworks,
+  title="{MLW}orks",
+  key="Harlequin Inc.",
+  organization="Harlequin Inc.",
+  year="1996"}
+
+@manual{manual:smlnj,
+  title="{S}tandard {ML} of {N}ew {J}ersey",
+  organization="{AT\&T} {B}ell {L}abratories",
+  key="{AT\&T} {B}ell {L}abratories",
+  year="1993"}
+
+@manual{manual:ocaml,
+  title="The {O}bjective {C}aml system, {D}ocumentation and {U}ser's guide",
+  author="Xavier Leroy",
+  year="1997",
+  url="http://pauillac.inria.fr/caml/"}
+
+@book{mth:sml-definition,
+  title="The Definition of Standard {ML}",
+  author="Robin Milner and Mads Tofte and Robert Harper",
+  publisher="{MIT} Press",
+  year="1990"}
+
+@manual{ti:pcscheme,
+ title="{PC Scheme User's Guide \& Language Reference Manual---Student
+Edition}",
+ author="{Texas Instruments}",
+ publisher="The Scientific Press, Redwood City, CA",
+ year="1988"}
+
+@inproceedings{fh:syntactic-control-state,
+  author="Matthias Felleisen and Robert Hieb",
+  title="The revised report on the syntactic theories of sequential control
+and state",
+  booktitle=tcs,
+  year = "1992",
+  pages="235--271"}
+
+@TechReport{hw:haskell,
+  author="Paul Hudak and Philip Wadler",
+  title =        "Report on the Programming Language {Haskell}",
+  institution =  "Yale University, Department of Computer Science",
+  year =         1991,
+  month  =       aug,
+  number =       "{YALE/DCS/RR777}",
+}
+
+
+@manual{schemers-inc:edscheme,
+ title="{E}d{S}cheme: {A} {M}odern {L}isp",
+ publisher="{Schemer's Inc.}",
+ key="{Schemer's Inc.}",
+ year="1991",
+ isbn="{0-9628745-8-2}"}
+
+@book{if:schemers-guide,
+ title="The schemer's guide",
+ author="{Ferguson, I}. and {Martin, E.} and {Kaufman, B.}",
+ year=1990,
+ publisher="{Schemer's Inc.}"}
+
+@unpublished{url:schemers,
+  title="{S}cheme in colleges and high schools",
+  author="{Schemer's Inc. and Terry Kaufman}",
+  year="2000",
+  note="Available on the web.\hfill\break URL: \verb|http://www.schemers.com/schools.html|"}
+
+@article{pw:calculating,
+  author="Philip Wadler",
+  title="A critique of {A}belson and {S}ussman, or, Why calculating is better
+than scheming",
+  journal="{SIGPLAN Notices}",
+  year="1987",
+  volume="22",
+  number="3",
+  month="March"}
+
+@inproceedings{nh:sba,
+ author="Heintze, Nevin",
+ title="Set based analysis of {ML} programs",
+ booktitle=lfp,
+ year=1994}
+
+@inproceedings{mf:lambda-v-cs,
+ author="Matthias Felleisen",
+ title="An extended $\lambda$-calculus for {S}cheme",
+ booktitle=lfp,
+ year="1988",
+ pages="72--84"}
+
+@book{ass:structure,
+ title="Structure and Interpretation of Computer Programs",
+ author="Harold Abelson and Gerald Jay Sussman and Julie Sussman",
+ publisher="MIT Press",
+ year="1985"}
+
+@inproceedings{gr:taming,
+ title="Taming the {Y} combinator \ldots",
+ author="{Rozas, G.~J.~}",
+ year=1992,
+ booktitle=lfp,
+ pages="226--234"}
+
+@book{jg:gemacs,
+ title="The Emacs Screen Editor",
+ author="{Gosling, James}",
+ publisher="Unipress Software Inc.",
+ year="1984"}
+@book{rs:gnu,
+ title="{GNU Emacs Manual}",
+ publisher="Free Software Foundation Inc., 675 Mass. Ave., Cambridge, MA 02139",
+ author="Stallman, Richard",
+ year="1987"}
+
+@techreport{hlpr:cm,
+  title="Incremental Recompilation for {S}tandard {ML} of {N}ew {J}ersey",
+  author="Robert Harper and Peter Lee and Frank Pfenning and Eugene
+  Rollins",
+  year="1994",
+  institution="Carnegie Mellon University",
+  type="Technical Report",
+  number="{CMU-CS-94-116}"}
+
+@unpublished{mb:cm,
+ author = "Matthias Blume",
+ title = "Standard {ML} of {N}ew {J}ersey Compilation Manager",
+ institution = "Princeton University",
+ note = "Manual accompanying SML/NJ software",
+ year = "1995"}
+
+@article{Koschmann:1988:BGB,
+        author = "Timothy Koschmann and Martha Walton Evens",
+        title = "Bridging the gap between object-oriented and logic
+programming",
+        journal = "{IEEE} Software",
+        volume = {5},
+        pages = {36--42},
+        month = "July",
+        year = {1988},
+        coden = {IESOEG}}
+
+@article{Francez:1985:ELP,
+        author = "Nissim Francez and Shalom Goldenberg and Ron Y. Pinter
+and Michael Tiomkin and Shalom Tsur",
+        title = "An environment for logic programming",
+        journal = "{SIGPLAN Notices}",
+        volume = {20},
+        number = {7},
+        pages = "179--190",
+        month = "July",
+        year = {1985},
+        coden = {SINODQ},
+        isbn = {0-89791-165-2},
+        issn = {0362-1340}}
+
+@article{Komorowski:1985:MIL,
+        author = "Henryk Jan Komorowski and Shigeo Omori",
+        title = "A model and an implementation of a logic programming environment",
+        journal = "{SIGPLAN Notices}",
+        volume = {20},
+        number = {7},
+        pages = {191--198},
+        month = "July",
+        year = {1985},
+        coden = {SINODQ},
+        isbn = {0-89791-165-2},
+        issn = {0362-1340}}
+
+@article{Lane:1988:TPR,
+        author = "A. Lane",
+        title = "{Turbo Prolog} revisited",
+        journal = {BYTE},
+        volume = {13},
+        number = {10},
+        pages = {209--212},
+        month = "October",
+        year = {1988},
+        coden = {BYTEDJ},
+        issn = {0360-5280}}
+
+@techreport{JH:ape,
+        author = {J. Hsiang and M. Srivas},
+        month = "July",
+        year = {1984},
+        title = "A {Prolog} environment",
+        number = {84-074},
+        institution = {State University of New York at Stony Brook},
+        address = {Stony Brook, New York}}
+
+@inproceedings{hs:prolog-data-dates,
+        author = "J. Hsiang and M. Srivas",
+        title = "A {Prolog} environment for developing and reasoning about data types",
+        booktitle = "Formal Methods and Software Development ({TAPSOFT} 85)",
+        month = {March},
+        year = {1985},
+        address = {Berlin},
+        pages = {276--293},
+        series = {lncs},
+        volume = {186},
+        editor = {H. Ehrig and others},
+        publisher = "Springer"}
+
+@unpublished{rbf:mod-abstr-interp,
+  author="Robert Bruce Findler",
+  title="Modular Abstract Interpreters",
+  note="Carnegie Mellon University",
+  month=jun,
+  year=1995}
+
+@inproceedings{fffkf:drscheme,
+        author = "Robert Bruce Findler and Cormac Flanagan and
+                  Matthew Flatt and Shriram Krishnamurthi and
+		  Matthias Felleisen",
+        title = "{DrScheme}: A Pedagogic Programming Environment for Scheme",
+        booktitle = "Programming Languages: Implementations, Logics, and Programs",
+        month = {September},
+        year = {1997},
+        address = {Southampton, UK},
+        pages = {369--388},
+        series = {LNCS},
+        volume = {1292},
+        editor = {Hugh Glaser and Pieter Hartel and Herbert Kuchen},
+        publisher = "Springer"}
+
+@phdthesis{cf:static-debugging,
+  author="Cormac Flanagan",
+  title="Effective Static Debugging via Componential Set-Based Analysis",
+  school="{R}ice {U}niversity",
+  year="1997"}
+
+@article{rr:first-course,
+  author="Reid, R.~J.",
+  title="First-course Language for Computer Science Majors",
+  journal="Posting to comp.edu",
+  year=1995,
+  month="October",
+  day=16}
+
+@InProceedings{fkf:mixins-popl,
+  author = "Matthew Flatt and Shriram Krishnamurthi and
+                  Matthias Felleisen",
+  title = "Classes and Mixins",
+  booktitle = popl,
+  year = "1998",
+  month = jan,
+  url = "http://www.cs.rice.edu/CS/PLT/Publications/"
+}
+
+@inproceedings{ffk:syntactic-control,
+ author="Matthias Felleisen and D.P. Friedman and Eugene Kohlbecker
+         and Bruce Duba",
+ title="A syntactic theory of sequential control",
+ booktitle=tcs,
+ year=1987,
+ pages="205--237"}
+
+@inproceedings{ff:syntactic-state,
+ author="Matthias Felleisen and D.P. Friedman",
+ title="A syntactic theory of sequential state",
+ booktitle=tcs,
+ year=1989,
+ pages="243--287"}
+
+@techreport{hj:sw-prototyping,
+  author="Paul Hudak and Mark P.~Jones",
+  title="{H}askell {\it vs}. {A}da {\it vs}. {C}++ {\it vs}. {A}wk {\it
+    vs}. \ldots {A}n Experiment in Software Prototyping Productivity",
+  institution="{D}epartment of {C}omputer {S}cience, {Y}ale {U}niversity",
+  year=1994,
+  type="Research Report",
+  number="YALEU/DCS/RR-1049",
+  address="New Haven, CT, USA",
+  month=oct}
+  
+@InProceedings{ff:units,
+  author = "Matthew Flatt and Matthias Felleisen",
+  title = "Units: Cool Modules for {HOT} Languages",
+  booktitle = pldi,
+  month = jun,
+  year = "1998",
+  pages = "236--248"
+}
+
+@InProceedings{ff:units-mixins,
+  author = "Robert Bruce Findler and Matthew Flatt",
+  title = "Modular Object-Oriented Programming with Units and Mixins",
+  booktitle = icfp,
+  month = sep,
+  year = "1998",
+  pages = "94--104"
+}
+
+
+@inproceedings{m:software-components,
+  author="M.~D.~McIlroy",
+  title="Mass Produced Software Components",
+  booktitle="Report on a Conference of the NATO Science Committee",
+  year=1968,
+  editor="P.~Naur and B.~Randell",
+  pages="138--150"
+}
+
+@book{s:component-software,
+ author = "Clemens Szyperski",
+ title = "Component Software",
+ publisher = "Addison-Wesley",
+ year = 1998
+}
+
+@book{m:oo-software-construction,
+  author="Bertrand Meyer",
+  title="Object-oriented Software Construction",
+  publisher="Prentice Hall",
+  city="New York",
+  year=1988}
+
+@book{m:eiffel,
+ author = "Bertrand Meyer",
+ title = "Eiffel: The Language",
+ publisher = "Prentice Hall",
+ year = 1992
+}
+
+@book{s:eiffel,
+ author = "Robert Switzer",
+ title = "Eiffel: An Introduction",
+ publisher = "Prentice Hall",
+ year = 1993
+}
+
+@book{gjs:java,
+ author = "James Gosling and Bill Joy and Guy Steele",
+ title = "The {J}ava(tm) Language Specification",
+ publisher = "Addison-Wesley",
+ year = 1996,
+ isbn = "0-201-63451-1"
+}
+
+@article{r:gedanken,
+  author="John Reynolds", 
+  title = "GEDANKEN: A Simple Typeless Language Based on the Principle of Completeness and the Reference Concept",
+  journal = cacm,
+  year="1970",
+  volume="13",
+  number="2",
+  pages="308--319",
+  month=may} 
+  
+@InProceedings{p:five-paradigm-shifts,
+  author = "V. Pratt",
+  title = "Five Paradigm Shifts in Programming Language Design and Their Realization 
+  in Viron, a Dataflow Programming Environment",
+  booktitle = popl,
+  month = {January},
+  year = "1983",
+  pages = {1-- 9}}
+
+@unpublished{fff:units,
+  author="Matthew Flatt and Robert Bruce Findler and Matthias Felleisen",
+  note="Submitted for publication",
+  title="Units: Cool Modules for {HOT} Languages"}
+
+@InProceedings{cf:soft,
+  author="Robert Cartwright and Mike Fagan",
+  title="Soft typing",
+  booktitle=pldi,
+  year="1991",
+  pages={278--292}}
+
+@inproceedings{fkf:classes-mixins,
+  author="Matthew Flatt and Shriram Krishnamurthi and Matthias Felleisen",
+  title="Classes and Mixins",
+  booktitle=popl,
+  year=1998,
+  pages="171--183",
+  month=jan}
+
+@Conference{l:manifest-types,
+  author =       "Xavier Leroy",
+  title =        "Manifest types, modules, and separate compilation",
+  booktitle =    popl,
+  year =         "1994",
+  month =        jan,
+  pages =        "109--122"
+}
+
+@Conference{hl:ho-modules,
+  author =       "Robert Harper and Mark Lillibridge",
+  title =        "A Type-Theoretic Approach to Higher-Order Modules
+                  with Sharing",
+  booktitle =    popl,
+  year =         "1994",
+  month =        jan,
+  pages =        "123--137"
+}
+
+@Conference{l:fully-transparent-ho-modules,
+  author =       "Xavier Leroy",
+  title =        "Applicative Functions and Fully Transparent
+                  Higher-order Modules",
+  booktitle =    popl,
+  year =         "1995",
+  month =        jan,
+  pages =        "142--153"
+}
+
+@InProceedings{b:ho-functors,
+  author =       "Sandip K. Biswas",
+  title =        "Higher-order Functors with Transparent Signatures",
+  booktitle =    popl,
+  month =        jan,
+  year =         "1995",
+  pages =        "154--163"
+}
+
+@InProceedings{mt:ho-functors,
+  author =       "David B. MacQueen and Mads Tofte",
+  title =        "{A} Semantics for Higher-order Functors",
+  year =         "1994",
+  url =          "ftp://ftp.research.att.com/dist/ml/papers/94-esop-macqueen.ps",
+  month =        apr,
+  pages =        "409--423",
+  publisher =    "Springer-Verlag",
+  series =       lncs,
+  colume =       "788",
+  booktitle =    esop,
+}
+
+@InProceedings{t:ho-modules,
+  author = "Mads Tofte",
+  title =  "Principal Signatures for Higher-order Program Modules",
+  booktitle = popl,
+  month = jan,
+  year  =  "1992",
+  pages = "189--199"
+}
+
+@InProceedings{est:recursively-constrained-types,
+  key =          "Eifrig, {\em et al.}",
+  author =       "Jonathan Eifrig and Scott F. Smith and Valery Trifonov",
+  title =        "Type Inference for Recursively Constrained Types and
+                 its Application to {OOP}",
+  booktitle =    "Mathematical Foundations of Programming Semantics, New
+                 Orleans",
+  series =       "Electronic Notes in Theoretical Computer Science",
+  publisher =    "Elsevier",
+  volume =       "1",
+  year =         "1995",
+  note =         "http://www.elsevier.nl/locate/entcs/volume1.html",
+}
+
+@inproceedings{am:static-types-dynamic-language,
+  author="Alexander Aiken and Brian R. Murphy",
+  title="Static Type Inference in a Dynamically Typed Language",
+  booktitle= popl,
+  year= "1991",
+  pages = "279--290"}
+
+@article{h:dynamic-typing,
+ author="Fritz Henglein",
+ title="Dynamic Typing: Syntax and Proof Theory",
+ journal=scp,
+ volume="22",
+number="3",
+pages="197--230",
+year="1994"}
+
+@inproceedings{ts:subtyping-constrained-types,
+author="Valery Trifonov and Scott F. Smith",
+title="Subtyping Constrained Types",
+booktitle=sas,
+year="1996",
+pages="349--365"}
+
+@Book{ghjv:design-patterns,
+  author =       "Erich Gamma and Richard Helm and Ralph Johnson and
+                 John Vlissides",
+  title =        "Design Patterns: Elements of Reusable Object-Oriented
+                 Software",
+  publisher =    "Addison Wesley",
+  address =      "Massachusetts",
+  year =         "1994",
+  ISBN =         "0-201-63361-2",
+  descriptor =   "Wiederverwendung, Software-Design, Programmieren,
+                 Pattern, Objekt-orientiert, Design",
+  annote =       "Folgende Themengebiete werden behandelt: - Creational
+                 Patterns: Abstract Factory, Builder, Factory Method,
+                 Prototype, Singleton. - Structural Patterns: Adapter,
+                 Bridge, Composit, Facade, Flyweight, Proxy. -
+                 Behavioral Patterns: Chain of Responsibility, Command,
+                 Interpreter, Iterator, Mediator, Observer, State,
+                 Strategy, Template Method, Visitor. - Struktur,
+                 Implementierung und Beispielanwendungen fuer alle
+                 Patterns.",
+}
+@book{gb:ada95,
+        author = "John Gilbert Presslie Barnes",
+        title = "Programming in {A}da 95",
+        publisher = "Addison-Wesley",
+        year = 1996
+}
+
+@Manual{ada95,
+  key =          "Ada",
+  title =        "Ada 95 Reference Manual. The Language. The Standard
+                 Libraries",
+  month =        jan,
+  year =         "1995",
+  organization = "International Organization for Standardization",
+}
+
+
+@article{hm:essence-of-ml,
+  author="Harper, R. and Mitchell, J.C.", 
+  Title="On the type structure of {Standard ML}",
+  Journal=toplas,
+  volume="15",
+  Number="2",
+  Year="1993",
+  pages="211--252",
+  Note={Earlier version appears as ``The Essence of {ML}'' in 
+        {\it Proc. 15th ACM Symp. on Principles of 
+        Programming  Languages,}
+        1988, pp. 28--46}}
+
+@article{ps:constrained-type-expressiveness,
+ title="Constrained types and their expressiveness",
+ author="Jens Palsberg and Scott Smith",
+ journal=toplas,
+ number="18",
+ volume="5",
+ pages="519--527",
+ month="September",
+ year="1996"}
+
+@inproceedings{awk:soft,
+ author="Alexander Aiken and Edward L. Wimmers and T. K. Lakshman",
+ title="Soft Typing with Conditional Types",
+ booktitle= popl,
+ year= "1994",
+ pages="163--173"}
+
+@inproceedings{kff:synth-fp-oo,
+  author="Shriram Krishnamurthi and Matthias Felleisen and Daniel P.~Friedman",
+  title="Synthesizing Object-Oriented and Functional Design to Promote Re-Use",
+  booktitle=ecoop,
+  year=1998,
+  month=jul,
+  pages="91--113"}
+
+@inproceedings{c:type-systems,
+  author="Luca Cardelli",
+  editor = "Allen B. Tucker",
+  booktitle="The {C}omputer {S}cience and {E}ngineering {H}andbook",
+  title="Type Systems",
+  isbn="0-8493-2909-4",
+  pages="2208--2236",
+  publisher="CRC Press",
+  year="1997"}
+
+@book{mt:compiler-generator,
+  author="Mads Tofte",
+  title="Compiler Generators",
+  publisher="Springer-Verlag",
+  year="1990"}
+  
+
+@inproceedings{ac:subtyping-recursive-types,
+	title="Subtyping Recursive Types",
+	author="Roberto Amadio and Luca Cardelli",
+	booktitle=toplas,
+	volume=15,
+	pages="575--631",
+	year=1993}
+
+@book{fffk:how-to-design-programs,
+ author = "Matthias Felleisen and Robert Bruce Findler and Matthew Flatt and Shriram Krishnamurthi",
+ title = "How to {D}esign {P}rograms",
+ publisher = "{MIT} Press",
+ year = 2001,
+ url = "http://www.htdp.org/"
+}
+
+
+@InProceedings{ffkf:mred,
+ author = "Matthew Flatt and Robert Bruce Findler and Shriram Krishnamurthi and
+                 Matthias Felleisen",
+ title = "Programming Languages as Operating Systems
+         ({\em or} Revenge of the Son of the {L}isp Machine)",
+ pages = "138--147",
+ booktitle = icfp,
+ month = sep,
+ year = "1999"
+}
+
+@article{s:bee,
+  author="Manuel Serrano",
+  journal=jfp,
+  year="2000",
+  title="Bee: an Integrated Development Environment for the Scheme
+Programming Language"}
+
+@Article{a:contracts,
+  author =       "Edward A. Addy",
+  title =        "A framework for performing verification and validation
+                 in reuse-based software engineering",
+  editor =       "William Frakes",
+  journal =      "Annals of Software Engineering",
+  publisher =    "Baltzer Science Publishers",
+  publaddr =     "Bussum, The Netherlands",
+  ISSN =         "1022-7091",
+  year =         "1998",
+  volume =       "5",
+  pages =        "279--292",
+  abstract =     "Verification and Validation (V\&V) is currently
+                 performed during application development for many
+                 systems, especially safety-critical and
+                 mission-critical systems. The V\&V process is intended
+                 to discover errors, especially errors related to
+                 critical processing, as early as possible during the
+                 development process. The system application provides
+                 the context under which the software artifacts are
+                 validated. This paper describes a framework that
+                 extends V\&V from an individual application system to a
+                 product line of systems that are developed within an
+                 architecture-based software engineering environment.
+                 This framework includes the activities of traditional
+                 application-level V\&V, and extends these activities
+                 into domain engineering and into the transition between
+                 domain engineering and application engineering. The
+                 framework includes descriptions of the types of
+                 activities to be performed during each of the
+                 life-cycle phases, and provides motivation for the
+                 activities.",
+  note =         "Systematic Software Reuse",
+  annote =       "incomplete",
+}
+
+@Article{kd:software-quality,
+  author =       "John C. Knight and Michael F. Dunn",
+  title =        "Software quality through domain-driven certification",
+  editor =       "William Frakes",
+  journal =      "Annals of Software Engineering",
+  publisher =    "Baltzer Science Publishers",
+  publaddr =     "Bussum, The Netherlands",
+  ISSN =         "1022-7091",
+  year =         "1998",
+  volume =       "5",
+  pages =        "293--315",
+  abstract =     "Software reuse is being pursued in an attempt to
+		  improve programmer productivity. The concept of reuse
+		  is to permit various work products of software
+		  development to be used on more than one project in
+		  order to amortize their development costs. Productivity
+		  is not the only advantage of reuse although it is the
+		  most widely publicized. By incorporating reusable
+		  components into a new product, the components bring
+		  with them whatever qualities they possess, and these
+		  can contribute to the quality of the new product. This
+		  suggests that reuse might be exploited for achieving
+		  quality as an entirely separate goal from improving
+		  productivity. If useful properties pertaining to
+		  quality could be shown to be present in products as a
+		  direct result of software development based on reuse,
+		  this might be a cost-effective way of achieving those
+		  qualities irrespective of the productivity advantages.
+		  The adjective certified is sometimes used to describe
+		  components that have been tested in some way prior to
+		  entry into a library but the term certified is not
+		  formally defined in the reuse literature. In this
+		  paper, we address the issue of certifying reusable
+		  components. We advocate the development of software by
+		  reuse with the specific intent of establishing as many
+		  of the required properties in the final product as
+		  possible by depending upon properties present in the
+		  reusable components. For this goal to succeed, a
+		  precise definition of certification of reusable
+		  components is required and such a definition is
+		  presented. The benefits of the definition and the way
+		  in which it supports the goal are explored.",
+  note =         "Systematic Software Reuse",
+  annote =       "incomplete",
+}
+
+@INPROCEEDINGS{hks:class-invariants,
+   author = "Kees Huizing and Ruurd Kuiper and SOOP",
+   title = "Verification of Object Oriented Programs Using Class Invariants",
+   booktitle = "Third International Conference, {FASE} 2000",
+   publisher =    "Springer-Verlag, LNCS 1783",
+   year = 2000,
+   month = mar,
+   pages = "208--221"
+}
+
+@inproceedings{kfd:macro-to-gen-prog,
+  author="Shriram Krishnamurthi and Matthias Felleisen and Bruce
+    F.~Duba",
+  title="From Macros to Reusable Generative Programming",
+  booktitle=gcse,
+  year=1999,
+  month=sep,
+  series=lncs,
+  pages="105--120",
+  number=1799}
+
+
+@techreport{k:mcmicmac, 
+  author="Shriram Krishnamurthi", 
+  title="{PLT} {M}c{M}ic{M}ac: Elaborator Manual", 
+  institution="{R}ice {U}niversity", 
+  year="1999", 
+  number="99-334", 
+  address="Houston, TX, USA"} 
+
+@inproceedings{af:interconnecting-objects-via-contracts, 
+  title="Interconnecting Objects via Contracts", 
+  author="L. Andrade and J. Fiadeiro", 
+  booktitle="{UML'99} Beyond the Standard, R.France and B.Rumpe (eds)", 
+  series=LNCS,
+  number=1723, 
+  pages="566--583", 
+  publisher="Springer-Verlag",
+  year="1999"}
+
+@inproceedings{bhtw:realization-interface-constraints-ocl,
+  author="M.ÊBidoit and R.ÊHennicker and F.ÊTort and M.ÊWirsing",
+  title="Correct realization of interface constraints with OCL",
+  booktitle="{UML'99} Beyond the Standard, R.France and B.Rumpe (eds)", 
+  pages="399--415",
+  series=LNCS,
+  number=1723, 
+  publisher="Springer-Verlag",
+  year="1999"}
+  
+@inproceedings{hdf:ocl-tools,
+  author="Heinrich Hussmann and Birgit Demuth and Frank Finger", 
+  title="Modular Architecture for a {Toolset} Supporting {OCL}",
+  booktitle="Proceedings of the UML 2000 Conference",
+  year=2000,
+  month=oct}
+
+@inproceedings{b:san-francisco,
+  author="Kathy Bohrer",
+  title="Architecture of the San Francisco Frameworks",
+  booktitle="IBM Systems Journal",
+  vol=37,
+  number=2,
+  pages="156--169",
+  year=1998}
+  
+@techreport{drlns:esc,
+  author="David L. Detlefs and K. Rustan and M. Leino and Greg Nelson and James B. Saxe",
+  title="Extended Static Checking",
+  institution="Compaq SRC Research Report",
+  year="1998",
+  number="158"}
+
+@inproceedings{cff:stepper,
+	author="John Clements and Matthew Flatt and Matthias Felleisen",
+	title="Modeling an Algebraic Stepper",
+	booktitle=esop,
+	year="2001"}
+
+@inproceedings{db:smle,
+  author="Dominic Duggan and Frederick Bent",
+  title="Explaining type inference",
+  booktitle=scp,
+  vol=27,
+  number=1,
+  month=jun,
+  year=1996}
+
+@inproceedings{gkhf:web-server,
+  author = "Paul Graunke and Shriram Krishnamurthi and Steve Van Der Hoeven 
+and Matthias Felleisen",
+  title = "Programming the Web with High-Level Programming Languages",
+  booktitle = "European Symposium On Programming",
+  year = "2001",
+  month = "April"}
+
+@article{fcffksf:drscheme,
+  author="Robert Bruce Findler and John Clements and
+          Cormac Flanagan and Matthew Flatt and
+          Shriram Krishnamurthi and Paul Steckler and Matthias Felleisen",
+  title="DrScheme: A Programming Environment for {Scheme}",
+  journal=jfp,
+  year="2001",
+  note="to appear"}
+
+@inproceedings{sb:memory-tools,
+  title="Understanding Memory Allocation of Scheme programs",
+  author="Manuel Serrano and Boehm, Hans J.",
+  booktitle=icfp,
+  year=2000,
+  pages="245--256"}
+
+@inproceedings{ps:jinsight,
+  author="De Pauw, Wim and Gary Sevitsky",
+  title="Visualizing Reference Patterns for Solving Memory Leaks in {J}ava",
+  booktitle=ecoop,
+  year=1999,
+  pages="116--134"}
+
+@inproceedings{w:type-errors,
+  author="Mitch Wand",
+  title="Finding the Source of Type Errors",
+  booktitle=popl,
+  year=1986,
+  pages="38--43"}
+
+@inproceedings{p:macros,
+  year=1980,
+  author="Kent M. Pitman",
+  title="Special Forms in Lisp",
+  booktitle="Lisp Conference",
+  pages="179--187"}
+
+@inproceedings{kef:struct-prop-lang-constr,
+  author="Shriram Krishnamurthi and Yan-David Erlich and Matthias
+    Felleisen",
+  title="Expressing Structural Properties as Language Constructs",
+  booktitle=esop,
+  year=1999,
+  month=mar,
+  series=lncs,
+  number=1576,
+  pages="258--272"}
+
+@article{fkf:mixins,
+ author="Matthew Flatt and Shriram Krishnamurthi and Matthias Felleisen",
+ title="A Programmer's Reduction Semantics for Classes and Mixins",
+ journal="Formal Syntax and Semantics of {J}ava",
+ year=1999,
+ pages="241--269",
+ publisher="Springer-Verlag",
+ series=lncs,
+ number=1523,
+ note="preliminary version appeared in proceedings of {\it Principles of Programming Languages}, 1998",
+ url = "http://www.cs.rice.edu/CS/PLT/Publications/"
+}
+
+@article{m:theory-of-type-polymorphism,
+  author="Milner, R",
+  title="A theory of type polymorphism in programming",
+  journal="Journal of Computer Systems Science",
+  volume=17,
+  year=1978,
+  pages="348--375"}
+
+
+@inproceedings{lg:effect-systems,
+  title="Polymorphic Effect Systems",
+  author="John M. Lucassen and David K. Gifford",
+  year=1988,
+  booktitle=popl,
+  pages="47--57"}
+
+@phdthesis{m:lc-models,
+  title="Lambda-Calculus Models of Programming Languages",
+  author="Morris, J. H.",
+  school="{Massachusetts Institute of Technology}",
+  year=1968}
+  
+@inproceedings{fx:dependent-types,
+  title="Dependent types in practical programming",
+  author="Hongwei Xi and Frank Pfenning",
+  booktitle=popl,
+  year=1999,
+  pages="214--227"}
